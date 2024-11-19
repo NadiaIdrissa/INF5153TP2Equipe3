@@ -30,7 +30,7 @@ public class ServicePermissions {
     }
 
     // This method maps the permission to the corresponding
-    public Commande getForPermission(Permission permission) {
+    public Commande<String, String> getForPermission(Permission permission) {
         switch (permission) {
             case CREER_UTILISATEUR:
                 return creerUtilisateur;

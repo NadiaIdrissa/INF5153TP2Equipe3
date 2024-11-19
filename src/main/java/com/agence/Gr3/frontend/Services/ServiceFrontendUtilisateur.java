@@ -8,10 +8,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import com.agence.Gr3.backend.Utilisateurs.Model.Identifiant;
-
 import org.springframework.http.HttpHeaders;
+import com.agence.Gr3.backend.Utilisateurs.Model.Identifiant;
 import java.util.Scanner;
 import java.util.Base64;
 
@@ -55,13 +53,11 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerLocataire() throws RestClientException {
+    public String creerLocataire(Scanner scanner, String Jwt) throws RestClientException {
 
         System.out.println("SERVICE CREER UTILISATEUR");
 
         String url = "http://localhost:8080/utilisateur/creer";
-
-        Scanner scanner = new Scanner(System.in);
 
         // Récupération des informations et affectation aux variables.
         System.out.println("Saisir votre adresse courriel: ");
@@ -92,10 +88,8 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerRepresentant() throws RestClientException {
+    public String creerRepresentant(Scanner scanner, String Jwt) throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Saisir votre adresse courriel: ");
         String courriel = scanner.nextLine();
@@ -108,8 +102,6 @@ public class ServiceFrontendUtilisateur {
         body.add("courriel", courriel);
         body.add("mdp", mdp);
         body.add("role", "representant");
-
-        Identifiant identifiant = new Identifiant(courriel, mdp);
 
         return restTemplate.postForObject(url, body, String.class);
     }
@@ -127,10 +119,8 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerAgent() throws RestClientException {
+    public String creerAgent(Scanner scanner, String Jwt) throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Saisir votre adresse de courriel: ");
         String courriel = scanner.nextLine();
@@ -156,10 +146,8 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String seConnecter() throws RestClientException {
+    public String seConnecter(Scanner scanner, String Jwt) throws RestClientException {
         String url = "http://localhost:8080/utilisateur/connexion";
-
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("Saisir votre adresse de courriel: ");
         String courriel = scanner.nextLine();
@@ -197,10 +185,8 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerOuMettreAJourProfil() throws RestClientException {
+    public String creerOuMettreAJourProfil(Scanner scanner, String Jwt) throws RestClientException {
         String url = "http://localhost:8080/utilisateur/profil";
-
-        Scanner scanner = new Scanner(System.in);
 
         // Informations de l'utilisateur
 

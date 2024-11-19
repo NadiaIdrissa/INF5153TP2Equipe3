@@ -2,6 +2,9 @@ package com.agence.Gr3.frontend.Commandes.Utilisateurs;
 
 import com.agence.Gr3.frontend.Commandes.Commande;
 import com.agence.Gr3.frontend.Services.ServiceFrontendUtilisateur;
+
+import java.util.Scanner;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,11 +20,8 @@ public class ReinitialiserMdp implements Commande<String, String> {
     }
 
     @Override
-    public String execute(String jwt) {
-
-        String resultat = "fonctionne";
-
-        return serviceFrontendUtilisateur.creerLocataire();
+    public String execute(Scanner scanner, String JWT) {
+        return serviceFrontendUtilisateur.creerLocataire(scanner, JWT);
 
     }
 

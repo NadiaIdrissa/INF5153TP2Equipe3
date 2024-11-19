@@ -2,13 +2,10 @@ package com.agence.Gr3.frontend.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 import com.agence.Gr3.backend.Utilisateurs.Model.Role;
-
 import com.agence.Gr3.frontend.Commandes.*;
 import com.agence.Gr3.backend.Utilisateurs.Services.ServicePermissions;
-
 import java.util.Scanner;
 import java.util.List;
 
@@ -59,9 +56,9 @@ public class Frontend {
 
             Permission permission = menu.get(choix);
 
-            Commande commande = servicePermissions.getForPermission(permission);
+            Commande<String, String> commande = servicePermissions.getForPermission(permission);
 
-            String resultat = commande.execute(JWT).toString();
+            String resultat = commande.execute(scanner, JWT).toString();
 
         }
     }
