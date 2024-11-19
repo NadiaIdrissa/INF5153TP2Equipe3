@@ -1,27 +1,31 @@
 package com.agence.Gr3.frontend.Commandes.Utilisateurs;
 
+import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 import com.agence.Gr3.frontend.Commandes.Commande;
-import com.agence.Gr3.frontend.Services.ServiceFrontendUtilisateur;
+import com.agence.Gr3.frontend.Services.FormulairesUtilisateur;
 
+import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+//TODO Associer a la bonne methode.
+
 @Component
 public class ReinitialiserMdp implements Commande<String, String> {
 
-    private ServiceFrontendUtilisateur serviceFrontendUtilisateur;
+    private FormulairesUtilisateur formulairesUtilisateur;
 
     @Autowired
-    public ReinitialiserMdp(ServiceFrontendUtilisateur serviceFrontendUtilisateur) {
-        this.serviceFrontendUtilisateur = serviceFrontendUtilisateur;
+    public ReinitialiserMdp(FormulairesUtilisateur formulairesUtilisateur) {
+        this.formulairesUtilisateur = formulairesUtilisateur;
 
     }
 
     @Override
-    public String execute(Scanner scanner, String JWT) {
-        return serviceFrontendUtilisateur.creerLocataire(scanner, JWT);
+    public String execute(List<Permission> permissions, Scanner scanner, String JWT) {
+        return formulairesUtilisateur.creerLocataire(permissions, scanner, JWT);
 
     }
 

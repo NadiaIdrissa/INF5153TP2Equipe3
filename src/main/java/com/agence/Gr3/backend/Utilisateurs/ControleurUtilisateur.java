@@ -4,28 +4,41 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
-
+import org.springframework.http.HttpHeaders;
 import com.agence.Gr3.backend.Utilisateurs.Model.*;
 import com.agence.Gr3.backend.Utilisateurs.Repository.DaoUtilisateurs;
+import com.agence.Gr3.backend.Utilisateurs.Services.ServiceJwt;
+
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Base64;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/utilisateur")
 public class ControleurUtilisateur {
 
     private DaoUtilisateurs daoUtilisateurs;
+    private ServiceJwt serviceJwt;
 
-    public ControleurUtilisateur(DaoUtilisateurs daoUtilisateurs) {
+    public ControleurUtilisateur(DaoUtilisateurs daoUtilisateurs, ServiceJwt serviceJwt) {
         this.daoUtilisateurs = daoUtilisateurs;
+        this.serviceJwt = serviceJwt;
+
     }
 
     @PostMapping("/creer")
-    public ResponseEntity<String> creerUtilisateur(@RequestBody MultiValueMap<String, String> requestBody) {
+    public ResponseEntity<String> creerUtilisateur(@RequestBody HashMap<String, String> requestBody) {
 
         System.out.println("CONTROLEUR UTILISATEUR");
 
-        String courriel = requestBody.get("courriel").toString();
-        String mdp = requestBody.get("mdp").toString();
-        String role = requestBody.get("role").toString();
+        String courriel = requestBody.get("courriel").toString().trim();
+        String mdp = requestBody.get("mdp").toString().trim();
+        String role = requestBody.get("role").toString().trim();
+
+        System.out.println("courriel recu: " + courriel);
+        System.out.println("mot de passe recu: " + mdp);
+
         Role roleUtilisateur;
 
         switch (role) {
@@ -44,20 +57,87 @@ public class ControleurUtilisateur {
         // Création et insertion d'un utilisateur
         Identifiant identifant = new Identifiant(courriel, mdp);
 
+        System.out.println(role);
+
         // Chercher
-        if (daoUtilisateurs.lire(identifant) != null) {
+        if (daoUtilisateurs.lire(identifant.getCourriel()) != null) {
             return new ResponseEntity<String>("Erreur: l'utilisateur existe déjà!", HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
         BuilderUtilisateur builder = new BuilderUtilisateur(identifant, roleUtilisateur);
         Utilisateur utilisateur = builder.build();
-        daoUtilisateurs.inserer(utilisateur);
+        daoUtilisateurs.inserer(courriel, utilisateur);
 
         return new ResponseEntity<String>("Utilisateur enregitstré", HttpStatus.OK);
 
     }
 
-    // @GetMapping("/connexion")
+    @GetMapping("/connexion")
+    public ResponseEntity<List<Permission>> connecterUtilisateur(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+
+        System.out.println("On entre dans le get mapping");
+
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Basic ")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Invalid or missing Authorization header
+        }
+
+        String token = authorizationHeader.substring(6); // Extract token part (after "Basic ")
+        String decodedCredentials = decodeBase64(token);
+
+        if (decodedCredentials == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Invalid Base64 encoding
+        }
+
+        String[] identifiants = decodedCredentials.split(":", 2);
+        if (identifiants.length != 2) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Invalid credentials format
+        }
+
+        // Extraction du courriel et mdp du tableau identifiants
+        String courriel = identifiants[0].trim();
+        String mdp = identifiants[1].trim();
+
+        System.out.println("courriel recu: " + courriel);
+        System.out.println("mot de passe recu: " + mdp);
+
+        Utilisateur utilisateur = daoUtilisateurs.lire(courriel);
+
+        if (utilisateur == null) {
+            System.out.println("L'utilisateur est null");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        } else if (!utilisateur.getIdentifiant().getMdp().equals(mdp)) {
+
+            String mdpBD = utilisateur.getIdentifiant().getMdp();
+
+            System.out.println(mdpBD + " de taille " + mdpBD.length());
+            System.out.println(mdp + " de taille " + mdp.length());
+
+            System.out.println("mot de passe BD: " + utilisateur.getIdentifiant().getMdp());
+            Identifiant identifiant = utilisateur.getIdentifiant();
+            String courriel2 = identifiant.getCourriel();
+            String statut = utilisateur.getStatut();
+            System.out.println("statut :" + statut);
+            System.out.println("Courriel2 :" + courriel2);
+            System.out.println("le mot de passe de correspond pas");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        List<Permission> permissions = utilisateur.getRole().getPermissions();
+        String jwt = serviceJwt.creerJwt(utilisateur.getIdentifiant());
+
+        return ResponseEntity.ok()
+                .header("Authorization", "Bearer " + jwt)
+                .body(permissions);
+    }
+
+    private String decodeBase64(String encodedString) {
+        try {
+            return new String(Base64.getDecoder().decode(encodedString), StandardCharsets.UTF_8);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 
 }

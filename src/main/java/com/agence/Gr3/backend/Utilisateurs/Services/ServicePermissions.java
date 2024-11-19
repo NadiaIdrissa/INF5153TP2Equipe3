@@ -6,6 +6,14 @@ import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.agence.Gr3.frontend.Commandes.Commande;
 
+/**
+ * Ce service sert à faire l'allocation
+ * 
+ * 
+ * 
+ * 
+ */
+
 @Service
 public class ServicePermissions {
 
@@ -15,7 +23,6 @@ public class ServicePermissions {
     private final Quitter reinitialiserMdp;
     private final ModifierProfil modifierProfil;
 
-    // Injecting all the beans via constructor
     @Autowired
     public ServicePermissions(CreerUtilisateur creerUtilisateur,
             Connexion connexion,
@@ -29,7 +36,6 @@ public class ServicePermissions {
         this.modifierProfil = modifierProfil;
     }
 
-    // This method maps the permission to the corresponding
     public Commande<String, String> getForPermission(Permission permission) {
         switch (permission) {
             case CREER_UTILISATEUR:

@@ -19,11 +19,11 @@ public class Frontend {
 
     Scanner scanner = new Scanner(System.in);
 
-    ServiceFrontendUtilisateur serviceFrontendUtilisateur;
+    FormulairesUtilisateur serviceFrontendUtilisateur;
     ServicePermissions servicePermissions;
 
     @Autowired
-    public Frontend(ServiceFrontendUtilisateur serviceFrontendUtilisateur, ServicePermissions servicePermissions) {
+    public Frontend(FormulairesUtilisateur serviceFrontendUtilisateur, ServicePermissions servicePermissions) {
         this.serviceFrontendUtilisateur = serviceFrontendUtilisateur;
         this.servicePermissions = servicePermissions;
     }
@@ -31,17 +31,18 @@ public class Frontend {
     public void displayMenu() {
 
         // Création du menu de base.
-        List<Permission> menu = Role.INVITE.getPermissions();
+        List<Permission> permissions = Role.INVITE.getPermissions();
         String JWT = "JWT";
 
         while (true) {
             System.out.println("\nBienvenue,veuillez faire un choix");
+            System.out.println(permissions);
 
-            System.out.println(Role.INVITE);
+            System.out.println(permissions.size());
+            String selection = scanner.nextLine().trim();
+            int choix = Integer.parseInt(selection);
 
-            // Simply call nextLine and trim the result
-            String selection = scanner.nextLine().trim(); // Waits for input
-            int choix = menu.size() - 1;
+            System.out.println("Votre choix: " + choix);
 
             if (selection.isEmpty()) {
                 System.out.println("Invalid input! Please choose a valid option.");
@@ -54,11 +55,11 @@ public class Frontend {
                 System.out.println("Invalid input! Please enter a valid integer.");
             }
 
-            Permission permission = menu.get(choix);
+            Permission permission = permissions.get(choix);
 
             Commande<String, String> commande = servicePermissions.getForPermission(permission);
 
-            String resultat = commande.execute(scanner, JWT).toString();
+            String resultat = commande.execute(permissions, scanner, JWT).toString();
 
         }
     }

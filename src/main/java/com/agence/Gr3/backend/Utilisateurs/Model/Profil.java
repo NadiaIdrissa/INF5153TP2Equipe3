@@ -58,13 +58,16 @@ public class Profil {
         this.adresse = adresse;
     }
 
-    @Override
-    public String toString() {
-        return "Profil{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", prenom='" + prenom + '\'' +
-                ", adresse=" + adresse +
-                '}';
-    }
+    /*
+     * @Override
+     * public String toString() {
+     * return "Profil{" +
+     * "id=" + id +
+     * ", nom='" + nom + '\'' +
+     * ", prenom='" + prenom + '\'' +
+     * ", adresse=" + adresse +
+     * '}';
+     * }
+     * 
+     */
 }

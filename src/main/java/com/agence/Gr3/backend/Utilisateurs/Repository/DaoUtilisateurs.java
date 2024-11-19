@@ -20,8 +20,17 @@ public class DaoUtilisateurs {
      * 
      * @param utilisateur L'utilisateur à insérer.
      */
-    public void inserer(Utilisateur utilisateur) {
-        this.utilisateurs.put(utilisateur.getIdentifiant().getCourriel(), utilisateur);
+    public void inserer(String courriel, Utilisateur utilisateur) {
+
+        System.out.println("courriel passé à insérer " + courriel);
+        this.utilisateurs.put(courriel, utilisateur);
+
+        HashMap<String, Integer> fruits = new HashMap<>();
+
+        fruits.put("pomme", 2);
+        fruits.put("banane", 2);
+
+        System.out.println(fruits);
 
         System.out.println(utilisateurs);
 
@@ -30,14 +39,21 @@ public class DaoUtilisateurs {
     /**
      * Récupère un utilisateur à partir de la base de donnée (collection).
      * 
-     * @param identifiant L'identifiant de l'utilisateur à récupérer.
+     * @param courriel Le courriel de l'utilisateur à récupérer.
      * @return L'utilisateur correspondant à l'identifiant, ou null si aucune
      *         utilisateur n'est trouvé.
      */
-    public Utilisateur lire(Identifiant identifiant) {
-        System.out.println("On entre dans repository lire");
+    public Utilisateur lire(String courriel) {
+        Utilisateur utilisateur;
 
-        return this.utilisateurs.get(identifiant.getCourriel());
+        // DEBUG
+        System.out.println("Tous les utilisateurs: " + this.utilisateurs); // Print the key being used
+        System.out.println("Courriel key: " + courriel); // Print the key being used
+        System.out.println("All keys in utilisateurs: " + this.utilisateurs.keySet()); // Print all keys in the map
+        utilisateur = this.utilisateurs.get(courriel);
+        System.out.println("mon utilisateur=" + utilisateur);
+
+        return utilisateur;
 
     }
 
@@ -76,13 +92,13 @@ public class DaoUtilisateurs {
     /**
      * Supprime un utilisateur à partir de l'identifiant spécifié.
      * 
-     * @param identifiant L'identifiant de l'utilisateur à supprimer.
+     * @param courriel Le courriel de l'utilisateur à supprimer.
      * @return true si la suppression a eu lieu, faux sinon
      */
-    public boolean supprimer(Identifiant identifiant) {
+    public boolean supprimer(String courriel) {
 
-        if (lire(identifiant) != null) {
-            utilisateurs.remove(identifiant.getCourriel());
+        if (lire(courriel) != null) {
+            utilisateurs.remove(courriel);
             return true;
         }
 

@@ -57,18 +57,20 @@ public class Utilisateur {
         return locateurs;
     }
 
-    @Override
-    public String toString() {
-        return "CompteUtilisateur{" +
-                "identifiant=" + identifiant +
-                ", role=" + role +
-                ", statut='" + statut + '\'' +
-                ", profil=" + profil +
-                ", notifications=" + notifications +
-                ", calendrier=" + calendrier +
-                ", annonces=" + annonces +
-                ", locateurs=" + locateurs +
-                '}';
-    }
-
+    /*
+     * @Override
+     * public String toString() {
+     * return "CompteUtilisateur{" +
+     * "identifiant=" + identifiant +
+     * ", role=" + role +
+     * ", statut='" + statut + '\'' +
+     * ", profil=" + profil +
+     * ", notifications=" + notifications +
+     * ", calendrier=" + calendrier +
+     * ", annonces=" + annonces +
+     * ", locateurs=" + locateurs +
+     * '}';
+     * }
+     * 
+     */
 }

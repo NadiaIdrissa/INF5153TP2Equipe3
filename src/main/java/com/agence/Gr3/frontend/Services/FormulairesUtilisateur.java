@@ -1,7 +1,10 @@
 package com.agence.Gr3.frontend.Services;
 
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -9,17 +12,21 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
-import com.agence.Gr3.backend.Utilisateurs.Model.Identifiant;
+import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
+import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Base64;
+import java.util.Enumeration;
+import java.util.List;
 
 @Service
-public class ServiceFrontendUtilisateur {
+public class FormulairesUtilisateur {
 
     // Injection d'un rest template pour l'envoi de requêtes HTTP
     private final RestTemplate restTemplate;
 
-    public ServiceFrontendUtilisateur() {
+    public FormulairesUtilisateur() {
         this.restTemplate = new RestTemplate();
 
     }
@@ -28,16 +35,25 @@ public class ServiceFrontendUtilisateur {
      * COMMENTAIRE GÉNÉRAL
      * 
      * Toutes les méthodes de la classe sont construites de la même façon, dans le
-     * but de simuler la complétion et l'envoi d'un formulaire au backend.
+     * but de simuler la complétion et l'envoi d'un formulaire au backend via une
+     * requête HTTP ainsi que de gérer la réponse HTTP obtenue de celui-ci.
+     * 
+     * 
      * 
      * Chaque méthode:
-     * 1) demande à l'utilisateur d'Saisir les données requises.
+     * 1) demande à l'utilisateur de saisir les données requises.
      * 2) affecte ces données aux variables
      * 3) ajoute les variables à une structure de type MultiValueMap, représentant
      * le body de la requête http.
      * 4) envoie au bon endpoint la requête http du type appropriée contenant le
      * body.
-     * 5) retourne une réponse http sous forme de chaîne de caractères.
+     * 5) retourne une réponse HTTP.
+     * 6) les éléments de la réponse sont utilisés
+     * 
+     * Note: les paramètres ne sont pas tous nécessairement utilisés, l'objectif est
+     * d'avoir des méthodes uniformes pour simplifier leur code d'invocation.
+     * 
+     * 
      */
 
     /**
@@ -53,7 +69,7 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerLocataire(Scanner scanner, String Jwt) throws RestClientException {
+    public String creerLocataire(List<Permission> permissions, Scanner scanner, String jwt) throws RestClientException {
 
         System.out.println("SERVICE CREER UTILISATEUR");
 
@@ -66,10 +82,10 @@ public class ServiceFrontendUtilisateur {
         String mdp = scanner.nextLine();
 
         // Construction du body (corps de la requête HTTP)
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("courriel", courriel);
-        body.add("mdp", mdp);
-        body.add("role", "locataire");
+        HashMap<String, String> body = new HashMap<>();
+        body.put("courriel", courriel);
+        body.put("mdp", mdp);
+        body.put("role", "locataire");
 
         return restTemplate.postForObject(url, body, String.class);
 
@@ -88,7 +104,8 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerRepresentant(Scanner scanner, String Jwt) throws RestClientException {
+    public String creerRepresentant(List<Permission> permissions, Scanner scanner, String jwt)
+            throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
         System.out.println("Saisir votre adresse courriel: ");
@@ -119,7 +136,7 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerAgent(Scanner scanner, String Jwt) throws RestClientException {
+    public String creerAgent(List<Permission> permissions, Scanner scanner, String jwt) throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
         System.out.println("Saisir votre adresse de courriel: ");
@@ -146,30 +163,63 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String seConnecter(Scanner scanner, String Jwt) throws RestClientException {
-        String url = "http://localhost:8080/utilisateur/connexion";
 
+    public String seConnecter(List<Permission> permissions, Scanner scanner, String jwt) throws RestClientException {
+
+        String message = null;
+        String url = "http://localhost:8080/utilisateur/connexion";
+        System.out.println("CONNEXION");
         System.out.println("Saisir votre adresse de courriel: ");
         String courriel = scanner.nextLine();
         System.out.println("Saisir votre mot de passe: ");
         String mdp = scanner.nextLine();
 
-        // Construction de l'identifiant sous la forme "courriel:motdepasse"
+        // Création d'un header d'autorisation basé sur les données de l'utilisateur
         String identifiant = courriel + ":" + mdp;
-
-        // Encodage de l'identifiant en Base64 pour l'authentification Basic
         String identifiantEncode = Base64.getEncoder().encodeToString(identifiant.getBytes());
-
-        // Création de l'entête HTTP et ajout de l'identifiant encodé
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Basic " + identifiantEncode);
+        HttpEntity<String> entite = new HttpEntity<>(headers);
 
-        // Création de l'entité HTTP avec les en-têtes
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+        try {
 
-        ResponseEntity<String> reponse = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            ResponseEntity<List<Permission>> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    entite,
+                    new ParameterizedTypeReference<List<Permission>>() {
+                    });
 
-        return reponse.getBody();
+            System.out.println("Le statut de la reponse est " + reponse.getStatusCode());
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+
+                HttpHeaders responseHeaders = reponse.getHeaders();
+                String authorizationHeader = responseHeaders.getFirst(HttpHeaders.AUTHORIZATION);
+
+                if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+                    jwt = authorizationHeader.substring(7);
+                    permissions.clear();
+                    permissions.addAll(reponse.getBody());
+
+                    System.out.println(permissions);
+                    message = "Connexion réussie!";
+
+                }
+
+            } else {
+
+                message = "Erreur de connexion";
+
+            }
+
+        } catch (RestClientException e) {
+
+            message = "Erreur de connexion";
+
+        }
+
+        return message;
 
     }
 
@@ -185,7 +235,8 @@ public class ServiceFrontendUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerOuMettreAJourProfil(Scanner scanner, String Jwt) throws RestClientException {
+    public String creerOuMettreAJourProfil(List<Permission> permissions, Scanner scanner, String jwt)
+            throws RestClientException {
         String url = "http://localhost:8080/utilisateur/profil";
 
         // Informations de l'utilisateur

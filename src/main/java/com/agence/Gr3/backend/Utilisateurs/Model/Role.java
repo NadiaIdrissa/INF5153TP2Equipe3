@@ -29,20 +29,4 @@ public enum Role {
         return permissions;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder(name() + " [");
-
-        for (int i = 0; i < permissions.size(); i++) {
-            sb.append(i).append(": ").append(permissions.get(i));
-
-            if (i < permissions.size() - 1) {
-                sb.append(", ");
-            }
-        }
-
-        sb.append("]");
-        return sb.toString();
-    }
-
 }
