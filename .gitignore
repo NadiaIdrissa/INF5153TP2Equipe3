@@ -1,0 +1,14 @@
+# Gradle build directories and wrapper scripts
+/build/
+/bin/
+
+# IDE and system files (VSCode)
+.vscode/
+
+# Log files
+application.log
+
+# IntelliJ IDEA project files (optional, if you ever use IDEA)
+.idea/
+/*.iml
+
