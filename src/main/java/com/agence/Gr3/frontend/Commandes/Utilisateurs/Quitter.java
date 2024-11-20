@@ -12,7 +12,7 @@ import java.util.Scanner;
 //TODO Associer a la bonne methode.
 
 @Component
-public class Quitter implements Commande<String, String> {
+public class Quitter implements Commande<StringBuilder, String> {
 
     private FormulairesUtilisateur formulairesUtilisateur;
 
@@ -23,7 +23,7 @@ public class Quitter implements Commande<String, String> {
     }
 
     @Override
-    public String execute(List<Permission> permissions, Scanner scanner, String JWT) {
+    public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
         return formulairesUtilisateur.creerLocataire(permissions, scanner, JWT);
 
     }

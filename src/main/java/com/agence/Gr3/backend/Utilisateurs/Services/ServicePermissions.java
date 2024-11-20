@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.agence.Gr3.frontend.Commandes.Commande;
 
 /**
- * Ce service sert à faire l'allocation
+ * Ce service sert à faire la correspondance avec
  * 
  * 
  * 
@@ -36,7 +36,7 @@ public class ServicePermissions {
         this.modifierProfil = modifierProfil;
     }
 
-    public Commande<String, String> getForPermission(Permission permission) {
+    public Commande<StringBuilder, String> getForPermission(Permission permission) {
         switch (permission) {
             case CREER_UTILISATEUR:
                 return creerUtilisateur;

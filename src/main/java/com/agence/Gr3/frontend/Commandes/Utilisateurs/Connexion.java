@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.List;
 
 @Component
-public class Connexion implements Commande<String, String> {
+public class Connexion implements Commande<StringBuilder, String> {
 
     private FormulairesUtilisateur formulairesUtilisateur;
 
@@ -20,7 +20,7 @@ public class Connexion implements Commande<String, String> {
     }
 
     @Override
-    public String execute(List<Permission> permissions, Scanner scanner, String JWT) {
+    public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
         return formulairesUtilisateur.seConnecter(permissions, scanner, JWT);
 
     }

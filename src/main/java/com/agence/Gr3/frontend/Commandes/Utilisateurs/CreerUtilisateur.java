@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component
-public class CreerUtilisateur implements Commande<String, String> {
+public class CreerUtilisateur implements Commande<StringBuilder, String> {
 
     private FormulairesUtilisateur formulairesUtilisateur;
 
@@ -21,7 +21,7 @@ public class CreerUtilisateur implements Commande<String, String> {
     }
 
     @Override
-    public String execute(List<Permission> permissions, Scanner scanner, String JWT) {
+    public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
         return formulairesUtilisateur.creerLocataire(permissions, scanner, JWT);
 
     }

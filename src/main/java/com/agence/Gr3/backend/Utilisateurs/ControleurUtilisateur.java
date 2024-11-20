@@ -18,9 +18,10 @@ import java.util.HashMap;
 @RequestMapping("/utilisateur")
 public class ControleurUtilisateur {
 
-    private DaoUtilisateurs daoUtilisateurs;
-    private ServiceJwt serviceJwt;
+    private DaoUtilisateurs daoUtilisateurs; // BD
+    private ServiceJwt serviceJwt; // Service pour gérer les JWT
 
+    // Constructeur
     public ControleurUtilisateur(DaoUtilisateurs daoUtilisateurs, ServiceJwt serviceJwt) {
         this.daoUtilisateurs = daoUtilisateurs;
         this.serviceJwt = serviceJwt;
@@ -30,14 +31,14 @@ public class ControleurUtilisateur {
     @PostMapping("/creer")
     public ResponseEntity<String> creerUtilisateur(@RequestBody HashMap<String, String> requestBody) {
 
-        System.out.println("CONTROLEUR UTILISATEUR");
+        System.out.println("CONTROLEUR UTILISATEUR"); // DEBUGG
 
         String courriel = requestBody.get("courriel").toString().trim();
         String mdp = requestBody.get("mdp").toString().trim();
         String role = requestBody.get("role").toString().trim();
 
-        System.out.println("courriel recu: " + courriel);
-        System.out.println("mot de passe recu: " + mdp);
+        System.out.println("courriel recu: " + courriel);// DEBUGG
+        System.out.println("mot de passe recu: " + mdp);// DEBUGG
 
         Role roleUtilisateur;
 
@@ -67,17 +68,43 @@ public class ControleurUtilisateur {
 
         BuilderUtilisateur builder = new BuilderUtilisateur(identifant, roleUtilisateur);
         Utilisateur utilisateur = builder.build();
+        // Comme la BD est une MAP qui contient des paires clé valeur
+        // la clé est le courriel et la valeur l'utilisateur.
         daoUtilisateurs.inserer(courriel, utilisateur);
 
         return new ResponseEntity<String>("Utilisateur enregitstré", HttpStatus.OK);
 
     }
 
-    @GetMapping("/connexion")
+    @PostMapping("/profil")
+    public ResponseEntity<String> modifierProfil(@RequestBody HashMap<String, String> requestBody) {
+
+        String nom = requestBody.get("nom").toString().trim();
+        String prenom = requestBody.get("prenom").toString().trim();
+        String telephone = requestBody.get("telephone").toString().trim();
+
+        String noCivique = requestBody.get("adresse.noCivique").toString().trim();
+        String suite = requestBody.get("adresse.suite").toString().trim();
+        String rue = requestBody.get("adresse.rue").toString().trim();
+        String codePostal = requestBody.get("adresse.codePostal").toString().trim();
+        String ville = requestBody.get("adresse.ville").toString().trim();
+        String province = requestBody.get("adresse.province").toString().trim();
+
+        // Création du l'adresse
+        // Adresse adresse = new Adresse(noCivique,
+        // suite,rue,codePostal,ville,province);
+
+        // Création du profil
+
+        return new ResponseEntity<String>("Utilisateur enregitstré", HttpStatus.OK);
+
+    }
+
+    @PostMapping("/connexion")
     public ResponseEntity<List<Permission>> connecterUtilisateur(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
 
-        System.out.println("On entre dans le get mapping");
+        System.out.println("CONNEXION");
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Basic ")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); // Invalid or missing Authorization header
@@ -130,6 +157,7 @@ public class ControleurUtilisateur {
         return ResponseEntity.ok()
                 .header("Authorization", "Bearer " + jwt)
                 .body(permissions);
+
     }
 
     private String decodeBase64(String encodedString) {

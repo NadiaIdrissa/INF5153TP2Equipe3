@@ -13,9 +13,12 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
+import com.agence.Gr3.backend.Utilisateurs.Model.Role;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Enumeration;
 import java.util.List;
@@ -69,7 +72,8 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerLocataire(List<Permission> permissions, Scanner scanner, String jwt) throws RestClientException {
+    public String creerLocataire(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+            throws RestClientException {
 
         System.out.println("SERVICE CREER UTILISATEUR");
 
@@ -87,6 +91,7 @@ public class FormulairesUtilisateur {
         body.put("mdp", mdp);
         body.put("role", "locataire");
 
+        // Requête HTTP
         return restTemplate.postForObject(url, body, String.class);
 
     }
@@ -104,7 +109,7 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerRepresentant(List<Permission> permissions, Scanner scanner, String jwt)
+    public String creerRepresentant(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
             throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
@@ -136,7 +141,8 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerAgent(List<Permission> permissions, Scanner scanner, String jwt) throws RestClientException {
+    public String creerAgent(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+            throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
         System.out.println("Saisir votre adresse de courriel: ");
@@ -164,11 +170,14 @@ public class FormulairesUtilisateur {
      *                             requête HTTP.
      */
 
-    public String seConnecter(List<Permission> permissions, Scanner scanner, String jwt) throws RestClientException {
+    public String seConnecter(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+            throws RestClientException {
+
+        System.out.println("Connexion:");
 
         String message = null;
         String url = "http://localhost:8080/utilisateur/connexion";
-        System.out.println("CONNEXION");
+
         System.out.println("Saisir votre adresse de courriel: ");
         String courriel = scanner.nextLine();
         System.out.println("Saisir votre mot de passe: ");
@@ -185,12 +194,10 @@ public class FormulairesUtilisateur {
 
             ResponseEntity<List<Permission>> reponse = restTemplate.exchange(
                     url,
-                    HttpMethod.GET,
+                    HttpMethod.POST,
                     entite,
                     new ParameterizedTypeReference<List<Permission>>() {
                     });
-
-            System.out.println("Le statut de la reponse est " + reponse.getStatusCode());
 
             if (reponse.getStatusCode() == HttpStatus.OK) {
 
@@ -198,28 +205,39 @@ public class FormulairesUtilisateur {
                 String authorizationHeader = responseHeaders.getFirst(HttpHeaders.AUTHORIZATION);
 
                 if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                    jwt = authorizationHeader.substring(7);
+                    // Modification des objets JWT et permissions
+                    JWT.setLength(0);
+                    JWT.append(authorizationHeader.substring(7));
                     permissions.clear();
                     permissions.addAll(reponse.getBody());
-
-                    System.out.println(permissions);
                     message = "Connexion réussie!";
 
                 }
 
             } else {
 
+                System.out.println("Le status n'est pas OK");
                 message = "Erreur de connexion";
 
             }
 
         } catch (RestClientException e) {
-
+            System.out.println("EXCEPTION");
             message = "Erreur de connexion";
 
         }
 
         return message;
+
+    }
+
+    public String seDeconnecter(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
+
+        JWT.setLength(0);
+        permissions.clear();
+        permissions.addAll(Role.INVITE.getPermissions());
+
+        return "Déconnexion réussie";
 
     }
 
@@ -240,9 +258,6 @@ public class FormulairesUtilisateur {
         String url = "http://localhost:8080/utilisateur/profil";
 
         // Informations de l'utilisateur
-
-        System.out.print("Saisir l'ID de l'utilisateur: ");
-        String id = scanner.nextLine();
 
         System.out.print("Saisir le nom de l'utilisateur: ");
         String nom = scanner.nextLine();
@@ -275,7 +290,6 @@ public class FormulairesUtilisateur {
         String province = scanner.nextLine();
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("id", id);
         body.add("nom", nom);
         body.add("prenom", prenom);
         body.add("telephone", telephone);
@@ -287,6 +301,26 @@ public class FormulairesUtilisateur {
         body.add("adresse.province", province);
 
         return restTemplate.postForObject(url, body, String.class);
+    }
+
+    Boolean validerFormatChiffre(String saisie) {
+
+        try {
+
+            if (saisie.isEmpty()) {
+                System.out.println("Saisie vide! Veuillez recommencer.");
+                return false;
+            }
+
+            Integer choix = Integer.parseInt(saisie);
+            return true;
+
+        } catch (NumberFormatException e) {
+            System.out.println("Saisie invalide! Choisissez un chiffre.");
+            return false;
+
+        }
+
     }
 
 }

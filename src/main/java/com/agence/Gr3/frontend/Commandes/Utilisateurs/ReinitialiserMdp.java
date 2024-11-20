@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 //TODO Associer a la bonne methode.
 
 @Component
-public class ReinitialiserMdp implements Commande<String, String> {
+public class ReinitialiserMdp implements Commande<StringBuilder, String> {
 
     private FormulairesUtilisateur formulairesUtilisateur;
 
@@ -24,7 +24,7 @@ public class ReinitialiserMdp implements Commande<String, String> {
     }
 
     @Override
-    public String execute(List<Permission> permissions, Scanner scanner, String JWT) {
+    public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
         return formulairesUtilisateur.creerLocataire(permissions, scanner, JWT);
 
     }

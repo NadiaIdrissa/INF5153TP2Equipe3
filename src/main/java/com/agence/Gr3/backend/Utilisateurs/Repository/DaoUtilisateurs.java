@@ -13,6 +13,7 @@ import java.util.HashMap;
 @Repository
 public class DaoUtilisateurs {
 
+    // Seule structure de donnée
     private final Map<String, Utilisateur> utilisateurs = new HashMap<String, Utilisateur>();
 
     /**
@@ -21,18 +22,7 @@ public class DaoUtilisateurs {
      * @param utilisateur L'utilisateur à insérer.
      */
     public void inserer(String courriel, Utilisateur utilisateur) {
-
-        System.out.println("courriel passé à insérer " + courriel);
         this.utilisateurs.put(courriel, utilisateur);
-
-        HashMap<String, Integer> fruits = new HashMap<>();
-
-        fruits.put("pomme", 2);
-        fruits.put("banane", 2);
-
-        System.out.println(fruits);
-
-        System.out.println(utilisateurs);
 
     }
 
@@ -44,16 +34,7 @@ public class DaoUtilisateurs {
      *         utilisateur n'est trouvé.
      */
     public Utilisateur lire(String courriel) {
-        Utilisateur utilisateur;
-
-        // DEBUG
-        System.out.println("Tous les utilisateurs: " + this.utilisateurs); // Print the key being used
-        System.out.println("Courriel key: " + courriel); // Print the key being used
-        System.out.println("All keys in utilisateurs: " + this.utilisateurs.keySet()); // Print all keys in the map
-        utilisateur = this.utilisateurs.get(courriel);
-        System.out.println("mon utilisateur=" + utilisateur);
-
-        return utilisateur;
+        return this.utilisateurs.get(courriel);
 
     }
 
