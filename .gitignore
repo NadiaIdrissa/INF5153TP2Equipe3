@@ -8,6 +8,11 @@
 # Log files
 application.log
 
+# Exclude these files
+*.bin
+*.probe
+*.lock
+
 # IntelliJ IDEA project files (optional, if you ever use IDEA)
 .idea/
 /*.iml
