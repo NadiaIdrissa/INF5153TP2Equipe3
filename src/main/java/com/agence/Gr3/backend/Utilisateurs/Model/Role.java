@@ -9,8 +9,8 @@ public enum Role {
             Permission.QUITTER)),
     AGENT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER)),
-    REPRESENTANT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
-            Permission.QUITTER)),
+    REPRESENTANT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL, Permission.CREER_LOGEMENT,
+            Permission.MODIFIER_LOGEMENT, Permission.QUITTER)),
     ADMIN(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER));
 

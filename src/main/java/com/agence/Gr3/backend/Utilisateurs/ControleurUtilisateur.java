@@ -3,7 +3,7 @@ package com.agence.Gr3.backend.Utilisateurs;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
+
 import org.springframework.http.HttpHeaders;
 import io.jsonwebtoken.Claims;
 import com.agence.Gr3.backend.Utilisateurs.Model.*;
@@ -48,9 +48,11 @@ public class ControleurUtilisateur {
 
             case "representant":
                 roleUtilisateur = Role.REPRESENTANT;
+                break;
 
             case "agent":
                 roleUtilisateur = Role.AGENT;
+                break;
 
             default:
                 roleUtilisateur = Role.LOCATAIRE;
@@ -60,7 +62,8 @@ public class ControleurUtilisateur {
         // Création et insertion d'un utilisateur
         Identifiant identifant = new Identifiant(courriel, mdp);
 
-        System.out.println(role);
+        System.out.println("Role recu: " + role);
+        System.out.println("ROLE DE L'UTILISATEUR : " + roleUtilisateur);
 
         // Chercher
         if (daoUtilisateurs.lire(identifant.getCourriel()) != null) {
@@ -179,6 +182,7 @@ public class ControleurUtilisateur {
         }
 
         List<Permission> permissions = utilisateur.getRole().getPermissions();
+        System.out.println("Nouvelles permissions:" + permissions);
         String jwt = serviceJwt.creerJwt(utilisateur.getIdentifiant());
 
         return ResponseEntity.ok()

@@ -1,0 +1,163 @@
+package com.agence.Gr3.frontend.Services;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
+
+@Service
+public class FormulairesLogement {
+
+    // Injection d'un rest template pour l'envoi de requêtes HTTP
+    private final RestTemplate restTemplate;
+    private final ValidationFormulaire validationFormulaire;
+
+    public FormulairesLogement(RestTemplate restTemplate, ValidationFormulaire validationFormulaire) {
+        this.restTemplate = restTemplate;
+        this.validationFormulaire = validationFormulaire;
+
+    }
+
+    public String creerLogement(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/logement/creer";
+
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = saisirLogement(scanner);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Le constructeur attend le body comme premier paramètre
+        HttpEntity<HashMap<String, Object>> entite = new HttpEntity<>(body, headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entite,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+                return "ajout logement réussie";
+
+            } else {
+                return "ajout logement non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+            return "ajout logement non réussie";
+
+        }
+
+    }
+
+    public String modifierLogement(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/logement/modifier";
+
+        int id = validationFormulaire.validationNombrePositif(
+                "Veuillez saisir l'identifiant du logement à modifier: \n",
+                scanner);
+
+        // Ajout du paramètre à l'URL
+        String urlFinal = UriComponentsBuilder.fromHttpUrl(url).path("/{id}").buildAndExpand(id).toUriString();
+
+        // Construction de l'en-tête de la requête (header)
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = saisirLogement(scanner);
+
+        // Construction de la requête
+        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
+
+        System.out.println("requete est terminée");
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    urlFinal,
+                    HttpMethod.PUT,
+                    requete,
+                    String.class);
+
+            System.out.println("requete envoyee");
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+                return "ajout logement réussie";
+
+            } else {
+                return "ajout logement non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+            return "ajout logement non réussie";
+
+        }
+
+    }
+
+    /**
+     * Cette méthode permet de rassembler dans une map les données relatives à un
+     * logement saisies au clavier par l'utilisateur.
+     * 
+     * @param scanner le Scanner utilisé pour saisir les données à partir de
+     *                l'entrée standard
+     * @return une HashMap contenant les données saisies par l'utilisateur.
+     */
+    private HashMap<String, Object> saisirLogement(Scanner scanner) {
+
+        HashMap<String, Object> logement = new HashMap<>();
+
+        // Saisie des informations et affectation aux variables.
+        double nbrChambres = validationFormulaire.validationNombrePositif("Veuillez saisir le nombre de chambres: \n",
+                scanner);
+        double nbrSallesDeBain = validationFormulaire
+                .validationNombrePositif("Veuillez saisir le nombre de salles de bain: \n", scanner);
+        double superficie = validationFormulaire.validationNombrePositif("Veuillez saisir la superficie: \n", scanner);
+        String description = validationFormulaire.validationNonNul("Veuillez saisir la description: \n", scanner);
+        int dureeBail = validationFormulaire.validationNombrePositif("Veuillez saisir la durée du bail (en mois): \n",
+                scanner);
+        int noCivique = validationFormulaire.validationNombrePositif("Veuillez saisir le no civique: \n", scanner);
+        int suite = validationFormulaire.validationNombreOptionnel("Veuillez saisir la suite (optionnel): \n", scanner);
+        String rue = validationFormulaire.validationNonNul("Veuillez saisir votre la rue: \n", scanner);
+        String codePostal = validationFormulaire.validationNonNul("Veuillez saisir le code postal: \n", scanner);
+        String ville = validationFormulaire.validationNonNul("Veuillez saisir la ville: \n", scanner);
+        String province = validationFormulaire.validationNonNul("Veuillez saisir la province: \n", scanner);
+
+        // Ajout à la Map
+        logement.put("nbrChambres", nbrChambres);
+        logement.put("nbrSallesDeBain", nbrSallesDeBain);
+        logement.put("superficie", superficie);
+        logement.put("description", description);
+        logement.put("dureeBail", dureeBail);
+        logement.put("noCivique", noCivique);
+        logement.put("suite", suite);
+        logement.put("rue", rue);
+        logement.put("codePostal", codePostal);
+        logement.put("ville", ville);
+        logement.put("province", province);
+
+        return logement;
+
+    }
+
+}

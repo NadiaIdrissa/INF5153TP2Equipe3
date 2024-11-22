@@ -280,6 +280,120 @@ public class FormulairesUtilisateur {
         headers.set("Authorization", "Bearer " + jwt);
 
         // Le constructeur attend le body comme premier paramètre
+        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    requete,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+
+                return "modification du profil réussie";
+
+            } else {
+
+                return "modification du profil non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+
+            return "modification du profil non réussie";
+
+        }
+
+    }
+
+    public String demanderVisite(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/logement/modifier";
+
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = new HashMap<>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Le constructeur attend le body comme premier paramètre
+        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    requete,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+                return "ajout visite réussie";
+
+            } else {
+                return "ajout visite non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+            return "ajout visite non réussie";
+
+        }
+
+    }
+
+    public String confirmerVisite(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/logement/modifier";
+
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = new HashMap<>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Le constructeur attend le body comme premier paramètre
+        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    requete,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+                return "ajout réussie";
+
+            } else {
+                return "confirmation non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+            return "confirmation non réussie";
+
+        }
+
+    }
+
+    public String modifierAnnonce(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/annonce/modifier";
+
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = new HashMap<>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Le constructeur attend le body comme premier paramètre
         HttpEntity<HashMap<String, Object>> entite = new HttpEntity<>(body, headers);
 
         try {
@@ -291,18 +405,52 @@ public class FormulairesUtilisateur {
                     String.class);
 
             if (reponse.getStatusCode() == HttpStatus.OK) {
-
-                return "modification réussie";
+                return "modification d'annonce réussie";
 
             } else {
-
-                return "modification non réussie";
+                return "modification d'annonce non réussie";
 
             }
 
         } catch (RestClientException e) {
+            return "modification d'anonce non réussie";
 
-            return "modification non réussie";
+        }
+
+    }
+
+    public String creerAnnonce(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/annonce/modifier";
+
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = new HashMap<>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Le constructeur attend le body comme premier paramètre
+        HttpEntity<HashMap<String, Object>> entite = new HttpEntity<>(body, headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entite,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+                return "ajout d'annonce réussie";
+
+            } else {
+                return "ajout d'annonce non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+            return "ajout d'annonce non réussie";
 
         }
 

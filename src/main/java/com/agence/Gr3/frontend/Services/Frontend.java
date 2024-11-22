@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 import com.agence.Gr3.backend.Utilisateurs.Model.Role;
 import com.agence.Gr3.frontend.Commandes.*;
-import com.agence.Gr3.backend.Utilisateurs.Services.ServicePermissions;
+import com.agence.Gr3.backend.Utilisateurs.Services.ServicePermission;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,10 @@ public class Frontend {
 
     // Objets requis et injectés par Springboot
     FormulairesUtilisateur serviceFrontendUtilisateur;
-    ServicePermissions servicePermissions;
+    ServicePermission servicePermissions;
 
     @Autowired
-    public Frontend(FormulairesUtilisateur serviceFrontendUtilisateur, ServicePermissions servicePermissions) {
+    public Frontend(FormulairesUtilisateur serviceFrontendUtilisateur, ServicePermission servicePermissions) {
         this.serviceFrontendUtilisateur = serviceFrontendUtilisateur;
         this.servicePermissions = servicePermissions;
     }
@@ -83,7 +83,7 @@ public class Frontend {
 
             // 1) Obtention de la permission à partir de la liste, en fonction du choix
             Permission permission = permissions.get(choix);
-
+            System.out.println("Permission choisie" + permission);
             // 2) Création d'une commande correspondant à la permission sélectionnée
             Commande<StringBuilder, String> commande = servicePermissions.getForPermission(permission);
 

@@ -46,6 +46,7 @@ public class DaoUtilisateurs {
      */
     public List<Utilisateur> rechercher() {
         List<Utilisateur> utilisateurs = new ArrayList<>(this.utilisateurs.values());
+
         return utilisateurs;
 
     }

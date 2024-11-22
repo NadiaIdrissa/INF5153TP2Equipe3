@@ -1,9 +1,6 @@
 
 package com.agence.Gr3.backend.Utilisateurs.Model;
 
-import com.agence.Gr3.frontend.Commandes.Utilisateurs.*;
-import com.agence.Gr3.frontend.Services.*;
-
 public enum Permission {
 
     /**
@@ -15,7 +12,13 @@ public enum Permission {
     CREER_UTILISATEUR("S'inscrire"),
     CONNEXION("Se connecter"),
     DECONNEXION("Se deconnecter"),
+    CREER_LOGEMENT("Ajouter un logement"),
+    MODIFIER_LOGEMENT("Modifier un logement"),
     MODIFIER_PROFIL("Modifier son profil"),
+    CREER_VISITE("Demander une visite"),
+    CONFIRMER_VISITE("Confirmer une visite"),
+    CREER_ANNONCE("Créer une annonce"),
+    MODIFIER_ANNONCE("Modifier une annonce"),
     QUITTER("Quitter l'application");
 
     private String description;

@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.Scanner;
 
 @Component
-public class CreerUtilisateur implements Commande<StringBuilder, String> {
+public class CreerAnnonce implements Commande<StringBuilder, String> {
 
     private FormulairesUtilisateur formulairesUtilisateur;
 
     @Autowired
-    public CreerUtilisateur(FormulairesUtilisateur formulairesUtilisateur) {
+    public CreerAnnonce(FormulairesUtilisateur formulairesUtilisateur) {
         this.formulairesUtilisateur = formulairesUtilisateur;
 
     }
 
     @Override
     public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
-        return formulairesUtilisateur.creerRepresentant(permissions, scanner, JWT);
+        return formulairesUtilisateur.creerAnnonce(permissions, scanner, JWT);
 
     }
 
