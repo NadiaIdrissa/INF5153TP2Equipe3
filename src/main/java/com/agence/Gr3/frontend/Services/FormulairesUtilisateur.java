@@ -28,9 +28,11 @@ public class FormulairesUtilisateur {
 
     // Injection d'un rest template pour l'envoi de requêtes HTTP
     private final RestTemplate restTemplate;
+    private final ValidationFormulaire validationFormulaire;
 
-    public FormulairesUtilisateur() {
-        this.restTemplate = new RestTemplate();
+    public FormulairesUtilisateur(RestTemplate restTemplate, ValidationFormulaire validationFormulaire) {
+        this.restTemplate = restTemplate;
+        this.validationFormulaire = validationFormulaire;
 
     }
 
@@ -80,10 +82,8 @@ public class FormulairesUtilisateur {
         String url = "http://localhost:8080/utilisateur/creer";
 
         // Récupération des informations et affectation aux variables.
-        System.out.println("Saisir votre adresse courriel: ");
-        String courriel = scanner.nextLine();
-        System.out.println("Saisir votre mot de passe: ");
-        String mdp = scanner.nextLine();
+        String courriel = validationFormulaire.validationNonNul("Veuillez saisir votre adresse courriel: \n", scanner);
+        String mdp = validationFormulaire.validationNonNul("Veuillez saisir votre mot de passe: \n", scanner);
 
         // Construction du body (corps de la requête HTTP)
         HashMap<String, String> body = new HashMap<>();
@@ -113,17 +113,15 @@ public class FormulairesUtilisateur {
             throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
-        System.out.println("Saisir votre adresse courriel: ");
-        String courriel = scanner.nextLine();
+        // Récupération des informations et affectation aux variables.
+        String courriel = validationFormulaire.validationNonNul("Veuillez saisir votre adresse courriel: \n", scanner);
+        String mdp = validationFormulaire.validationNonNul("Veuillez saisir votre mot de passe: \n", scanner);
 
-        System.out.println("Saisir votre mot de passe: ");
-        String mdp = scanner.nextLine();
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-
-        body.add("courriel", courriel);
-        body.add("mdp", mdp);
-        body.add("role", "representant");
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, String> body = new HashMap<>();
+        body.put("courriel", courriel);
+        body.put("mdp", mdp);
+        body.put("role", "representant");
 
         return restTemplate.postForObject(url, body, String.class);
     }
@@ -145,17 +143,15 @@ public class FormulairesUtilisateur {
             throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
-        System.out.println("Saisir votre adresse de courriel: ");
-        String courriel = scanner.nextLine();
+        // Récupération des informations et affectation aux variables.
+        String courriel = validationFormulaire.validationNonNul("Veuillez saisir votre adresse courriel: \n", scanner);
+        String mdp = validationFormulaire.validationNonNul("Veuillez saisir votre mot de passe: \n", scanner);
 
-        System.out.println("Saisir votre mot de passe: ");
-        String mdp = scanner.nextLine();
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-
-        body.add("courriel", courriel);
-        body.add("mdp", mdp);
-        body.add("role", "agent");
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, String> body = new HashMap<>();
+        body.put("courriel", courriel);
+        body.put("mdp", mdp);
+        body.put("role", "agent");
 
         return restTemplate.postForObject(url, body, String.class);
     }
@@ -178,10 +174,8 @@ public class FormulairesUtilisateur {
         String message = null;
         String url = "http://localhost:8080/utilisateur/connexion";
 
-        System.out.println("Saisir votre adresse de courriel: ");
-        String courriel = scanner.nextLine();
-        System.out.println("Saisir votre mot de passe: ");
-        String mdp = scanner.nextLine();
+        String courriel = validationFormulaire.validationNonNul("Veuillez saisir votre adresse courriel: \n", scanner);
+        String mdp = validationFormulaire.validationNonNul("Veuillez saisir votre mot de passe: \n", scanner);
 
         // Création d'un header d'autorisation basé sur les données de l'utilisateur
         String identifiant = courriel + ":" + mdp;
@@ -259,68 +253,29 @@ public class FormulairesUtilisateur {
 
         // Informations de l'utilisateur
 
-        System.out.print("Saisir le nom de l'utilisateur: ");
-        String nom = scanner.nextLine();
+        String nom = validationFormulaire.validationNonNul("Veuillez saisir votre nom: \n", scanner);
+        String prenom = validationFormulaire.validationNonNul("Veuillez saisir votre prénom: \n", scanner);
+        String telephone = validationFormulaire.validationNonNul("Veuillez saisir votre no de téléphone: \n", scanner);
+        int noCivique = validationFormulaire.validationNombrePositif("Veuillez saisir le no civique: \n", scanner);
+        int suite = validationFormulaire.validationNombreOptionnel("Veuillez saisir la suite (optionnel): \n", scanner);
+        String rue = validationFormulaire.validationNonNul("Veuillez saisir votre la rue: \n", scanner);
+        String codePostal = validationFormulaire.validationNonNul("Veuillez saisir le code postal: \n", scanner);
+        String ville = validationFormulaire.validationNonNul("Veuillez saisir la ville: \n", scanner);
+        String province = validationFormulaire.validationNonNul("Veuillez saisir la province: \n", scanner);
 
-        System.out.print("Saisir le prénom de l'utilisateur: ");
-        String prenom = scanner.nextLine();
-
-        System.out.print("Saisir le numéro de téléphone: ");
-        String telephone = scanner.nextLine();
-
-        // Adresse de l'utilisateur
-        System.out.println("Saisir les détails de l'adresse de l'utilisateur");
-
-        System.out.print("Saisir le numéro civique: ");
-        String noCivique = scanner.nextLine();
-
-        System.out.print("Saisir la suite de l'adresse (optionnel): ");
-        String suite = scanner.nextLine();
-
-        System.out.print("Saisir le nom de la rue: ");
-        String rue = scanner.nextLine();
-
-        System.out.print("Saisir le code postal: ");
-        String codePostal = scanner.nextLine();
-
-        System.out.print("Saisir la ville: ");
-        String ville = scanner.nextLine();
-
-        System.out.print("Saisir la province: ");
-        String province = scanner.nextLine();
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("nom", nom);
-        body.add("prenom", prenom);
-        body.add("telephone", telephone);
-        body.add("adresse.noCivique", noCivique);
-        body.add("adresse.suite", suite);
-        body.add("adresse.rue", rue);
-        body.add("adresse.codePostal", codePostal);
-        body.add("adresse.ville", ville);
-        body.add("adresse.province", province);
+        // Construction du body (corps de la requête HTTP)
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("nom", nom);
+        body.put("prenom", prenom);
+        body.put("telephone", telephone);
+        body.put("noCivique", noCivique);
+        body.put("suite", suite);
+        body.put("rue", rue);
+        body.put("codePostal", codePostal);
+        body.put("ville", ville);
+        body.put("province", province);
 
         return restTemplate.postForObject(url, body, String.class);
-    }
-
-    Boolean validerFormatChiffre(String saisie) {
-
-        try {
-
-            if (saisie.isEmpty()) {
-                System.out.println("Saisie vide! Veuillez recommencer.");
-                return false;
-            }
-
-            Integer choix = Integer.parseInt(saisie);
-            return true;
-
-        } catch (NumberFormatException e) {
-            System.out.println("Saisie invalide! Choisissez un chiffre.");
-            return false;
-
-        }
-
     }
 
 }
