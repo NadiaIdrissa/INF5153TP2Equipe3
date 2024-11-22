@@ -5,13 +5,13 @@ import java.util.List;
 public enum Role {
 
     INVITE(List.of(Permission.CREER_UTILISATEUR, Permission.CONNEXION, Permission.QUITTER)),
-    LOCATAIRE(List.of(Permission.DECONNEXION, Permission.REINITIALISER_MDP, Permission.MODIFIER_PROFIL,
+    LOCATAIRE(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER)),
-    AGENT(List.of(Permission.DECONNEXION, Permission.REINITIALISER_MDP, Permission.MODIFIER_PROFIL,
+    AGENT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER)),
-    REPRESENTANT(List.of(Permission.DECONNEXION, Permission.REINITIALISER_MDP, Permission.MODIFIER_PROFIL,
+    REPRESENTANT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER)),
-    ADMIN(List.of(Permission.DECONNEXION, Permission.REINITIALISER_MDP, Permission.MODIFIER_PROFIL,
+    ADMIN(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER));
 
     private List<Permission> permissions;

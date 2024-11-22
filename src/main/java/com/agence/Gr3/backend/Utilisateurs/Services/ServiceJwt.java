@@ -9,7 +9,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import javax.crypto.SecretKey;
-import org.springframework.stereotype.Service;
 
 import com.agence.Gr3.backend.Utilisateurs.Model.Identifiant;
 
@@ -35,6 +34,19 @@ public class ServiceJwt {
                 .signWith(this.cleSecrete).compact();
 
         return token;
+
+    }
+
+    public Claims validerJwt(String token) {
+
+        try {
+            Claims claims = Jwts.parser().verifyWith(this.cleSecrete).build().parseSignedClaims(token).getPayload();
+            return claims;
+
+        } catch (JwtException jwtException) {
+            throw jwtException;
+
+        }
 
     }
 

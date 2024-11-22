@@ -5,9 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.http.HttpHeaders;
+import io.jsonwebtoken.Claims;
 import com.agence.Gr3.backend.Utilisateurs.Model.*;
 import com.agence.Gr3.backend.Utilisateurs.Repository.DaoUtilisateurs;
 import com.agence.Gr3.backend.Utilisateurs.Services.ServiceJwt;
+import com.agence.Gr3.Model.Adresse;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -77,26 +79,51 @@ public class ControleurUtilisateur {
     }
 
     @PostMapping("/profil")
-    public ResponseEntity<String> modifierProfil(@RequestBody HashMap<String, String> requestBody) {
+    public ResponseEntity<String> modifierProfil(@RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody HashMap<String, Object> requestBody) {
 
-        String nom = requestBody.get("nom").toString().trim();
-        String prenom = requestBody.get("prenom").toString().trim();
-        String telephone = requestBody.get("telephone").toString().trim();
+        // Extraction et validation du JWT
+        String jwt = authorizationHeader.replace("Bearer ", "");
 
-        String noCivique = requestBody.get("adresse.noCivique").toString().trim();
-        String suite = requestBody.get("adresse.suite").toString().trim();
-        String rue = requestBody.get("adresse.rue").toString().trim();
-        String codePostal = requestBody.get("adresse.codePostal").toString().trim();
-        String ville = requestBody.get("adresse.ville").toString().trim();
-        String province = requestBody.get("adresse.province").toString().trim();
+        try {
 
-        // Création du l'adresse
-        // Adresse adresse = new Adresse(noCivique,
-        // suite,rue,codePostal,ville,province);
+            // Validation du JWT soumis
+            Claims claims = serviceJwt.validerJwt(jwt);
+            Utilisateur utilisateur = daoUtilisateurs.lire(claims.getSubject());
 
-        // Création du profil
+            if (utilisateur != null) {
 
-        return new ResponseEntity<String>("Utilisateur enregitstré", HttpStatus.OK);
+                // Création de l'adresse
+                int noCivique = (Integer) requestBody.get("noCivique");
+                int suite = (Integer) requestBody.get("suite");
+                String rue = requestBody.get("rue").toString().trim();
+                String codePostal = requestBody.get("codePostal").toString().trim();
+                String ville = requestBody.get("ville").toString().trim();
+                String province = requestBody.get("province").toString().trim();
+                Adresse adresse = new Adresse(noCivique, suite, rue, codePostal, ville, province);
+
+                // Création du profil
+                String nom = requestBody.get("nom").toString().trim();
+                String prenom = requestBody.get("prenom").toString().trim();
+                String telephone = requestBody.get("telephone").toString().trim();
+                Profil profil = new Profil(nom, prenom, telephone, adresse);
+
+                // modification du profil de l'utilisateur
+                utilisateur.setProfil(profil);
+
+                System.out.println(utilisateur);
+
+                return new ResponseEntity<String>("Profil modifié!", HttpStatus.OK);
+
+            }
+
+            return new ResponseEntity<String>("Accès interdit!", HttpStatus.UNAUTHORIZED);
+
+        } catch (Exception e) {
+
+            return new ResponseEntity<String>("Accès interdit!", HttpStatus.UNAUTHORIZED);
+
+        }
 
     }
 

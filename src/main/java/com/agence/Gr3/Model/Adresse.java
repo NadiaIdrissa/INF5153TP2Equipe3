@@ -68,13 +68,11 @@ public class Adresse {
 
     @Override
     public String toString() {
-        return "Adresse{" +
-                "noCivique=" + noCivique +
-                ", suite=" + suite +
-                ", rue='" + rue + '\'' +
-                ", codePostal='" + codePostal + '\'' +
-                ", ville='" + ville + '\'' +
-                ", province='" + province + '\'' +
-                '}';
+        return "\n\tNo Civique: " + noCivique +
+                "\n\tSuite: " + suite +
+                "\n\tRue: " + rue +
+                "\n\tCode Postal: " + codePostal +
+                "\n\tVille: " + ville +
+                "\n\tProvince: " + province;
     }
 }

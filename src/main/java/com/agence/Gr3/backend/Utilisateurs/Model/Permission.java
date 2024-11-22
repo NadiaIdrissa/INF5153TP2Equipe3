@@ -12,11 +12,10 @@ public enum Permission {
      * 
      */
 
-    CREER_UTILISATEUR("Cree un utilisateur"),
-    CONNEXION("Connecte l'utilisateur"),
-    DECONNEXION("Deconnecte l'utilisateur"),
-    REINITIALISER_MDP("Reinitialise le mot de passe"),
-    MODIFIER_PROFIL("Crée un utilisateur"),
+    CREER_UTILISATEUR("S'inscrire"),
+    CONNEXION("Se connecter"),
+    DECONNEXION("Se deconnecter"),
+    MODIFIER_PROFIL("Modifier son profil"),
     QUITTER("Quitter l'application");
 
     private String description;

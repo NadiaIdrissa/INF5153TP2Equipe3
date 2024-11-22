@@ -44,8 +44,6 @@ public class ServicePermissions {
                 return connexion;
             case DECONNEXION:
                 return deconnexion;
-            case REINITIALISER_MDP:
-                return reinitialiserMdp;
             case MODIFIER_PROFIL:
                 return modifierProfil;
             default:

@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Utilisateur {
 
-    private final Identifiant identifiant;
+    private Identifiant identifiant;
     private final Role role;
-    private final String statut;
-    private final Profil profil;
-    private final List<String> notifications;
-    private final List<String> calendrier;
-    private final List<String> annonces;
-    private final List<String> locateurs;
+    private String statut;
+    private Profil profil;
+    private List<String> notifications;
+    private List<String> calendrier;
+    private List<String> annonces;
+    private List<String> locateurs;
 
     // Constructeur acceptant une instance de type builder
     protected Utilisateur(BuilderUtilisateur builder) {
@@ -57,20 +57,44 @@ public class Utilisateur {
         return locateurs;
     }
 
-    /*
-     * @Override
-     * public String toString() {
-     * return "CompteUtilisateur{" +
-     * "identifiant=" + identifiant +
-     * ", role=" + role +
-     * ", statut='" + statut + '\'' +
-     * ", profil=" + profil +
-     * ", notifications=" + notifications +
-     * ", calendrier=" + calendrier +
-     * ", annonces=" + annonces +
-     * ", locateurs=" + locateurs +
-     * '}';
-     * }
-     * 
-     */
+    public void setIdentifiant(Identifiant identifiant) {
+        this.identifiant = identifiant;
+    }
+
+    public void setStatut(String statut) {
+        this.statut = statut;
+    }
+
+    public void setProfil(Profil profil) {
+        this.profil = profil;
+    }
+
+    public void setNotifications(List<String> notifications) {
+        this.notifications = notifications;
+    }
+
+    public void setCalendrier(List<String> calendrier) {
+        this.calendrier = calendrier;
+    }
+
+    public void setAnnonces(List<String> annonces) {
+        this.annonces = annonces;
+    }
+
+    public void setLocateurs(List<String> locateurs) {
+        this.locateurs = locateurs;
+    }
+
+    @Override
+    public String toString() {
+        return "\nCompte Utilisateur:\n" +
+                "\n   Role: " + role +
+                "\n   Statut: " + statut + "\n" +
+                "\n   Profil: " + profil + "\n" +
+                "\n   Notifications: " + notifications +
+                "\n   Calendrier: " + calendrier +
+                "\n   Annonces: " + annonces +
+                "\n   Locateurs: " + locateurs + "\n";
+    }
+
 }

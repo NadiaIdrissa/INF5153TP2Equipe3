@@ -74,7 +74,7 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerLocataire(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+    public String creerLocataire(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
             throws RestClientException {
 
         System.out.println("SERVICE CREER UTILISATEUR");
@@ -109,7 +109,7 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerRepresentant(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+    public String creerRepresentant(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
             throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
@@ -139,7 +139,7 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerAgent(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+    public String creerAgent(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
             throws RestClientException {
         String url = "http://localhost:8080/utilisateur/creer";
 
@@ -166,7 +166,7 @@ public class FormulairesUtilisateur {
      *                             requête HTTP.
      */
 
-    public String seConnecter(List<Permission> permissions, Scanner scanner, StringBuilder JWT)
+    public String seConnecter(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
             throws RestClientException {
 
         System.out.println("Connexion:");
@@ -200,8 +200,8 @@ public class FormulairesUtilisateur {
 
                 if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
                     // Modification des objets JWT et permissions
-                    JWT.setLength(0);
-                    JWT.append(authorizationHeader.substring(7));
+                    jwt.setLength(0);
+                    jwt.append(authorizationHeader.substring(7));
                     permissions.clear();
                     permissions.addAll(reponse.getBody());
                     message = "Connexion réussie!";
@@ -225,9 +225,9 @@ public class FormulairesUtilisateur {
 
     }
 
-    public String seDeconnecter(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
+    public String seDeconnecter(List<Permission> permissions, Scanner scanner, StringBuilder jwt) {
 
-        JWT.setLength(0);
+        jwt.setLength(0);
         permissions.clear();
         permissions.addAll(Role.INVITE.getPermissions());
 
@@ -247,12 +247,13 @@ public class FormulairesUtilisateur {
      * @throws RestClientException Si une erreur survient lors de l'exécution de la
      *                             requête HTTP.
      */
-    public String creerOuMettreAJourProfil(List<Permission> permissions, Scanner scanner, String jwt)
+    public String modifierProfil(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
             throws RestClientException {
+
+        String message = null;
         String url = "http://localhost:8080/utilisateur/profil";
 
         // Informations de l'utilisateur
-
         String nom = validationFormulaire.validationNonNul("Veuillez saisir votre nom: \n", scanner);
         String prenom = validationFormulaire.validationNonNul("Veuillez saisir votre prénom: \n", scanner);
         String telephone = validationFormulaire.validationNonNul("Veuillez saisir votre no de téléphone: \n", scanner);
@@ -275,7 +276,36 @@ public class FormulairesUtilisateur {
         body.put("ville", ville);
         body.put("province", province);
 
-        return restTemplate.postForObject(url, body, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Le constructeur attend le body comme premier paramètre
+        HttpEntity<HashMap<String, Object>> entite = new HttpEntity<>(body, headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entite,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+
+                return "modification réussie";
+
+            } else {
+
+                return "modification non réussie";
+
+            }
+
+        } catch (RestClientException e) {
+
+            return "modification non réussie";
+
+        }
+
     }
 
 }

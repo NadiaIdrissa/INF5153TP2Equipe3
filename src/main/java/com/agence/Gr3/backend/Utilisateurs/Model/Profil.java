@@ -9,7 +9,7 @@ public class Profil {
     private String telephone;
     private Adresse adresse;
 
-    public Profil(int id, String nom, String prenom, String telephone, Adresse adresse) {
+    public Profil(String nom, String prenom, String telephone, Adresse adresse) {
 
         this.nom = nom;
         this.prenom = prenom;
@@ -49,15 +49,11 @@ public class Profil {
         this.adresse = adresse;
     }
 
-    /*
-     * @Override
-     * public String toString() {
-     * return "Profil{" +
-     * ", nom='" + nom + '\'' +
-     * ", prenom='" + prenom + '\'' +
-     * ", adresse=" + adresse +
-     * '}';
-     * }
-     * 
-     */
+    @Override
+    public String toString() {
+        return "\n   nom: " + nom +
+                "\n   Prenom: " + prenom +
+                "\n   Adresse: " + adresse;
+    }
+
 }

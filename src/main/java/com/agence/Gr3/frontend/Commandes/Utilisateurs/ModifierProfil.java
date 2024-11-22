@@ -24,7 +24,7 @@ public class ModifierProfil implements Commande<StringBuilder, String> {
 
     @Override
     public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
-        return formulairesUtilisateur.creerLocataire(permissions, scanner, JWT);
+        return formulairesUtilisateur.modifierProfil(permissions, scanner, JWT);
 
     }
 
