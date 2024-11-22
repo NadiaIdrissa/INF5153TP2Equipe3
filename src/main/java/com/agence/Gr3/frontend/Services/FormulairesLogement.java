@@ -115,6 +115,46 @@ public class FormulairesLogement {
 
     }
 
+    public String afficherLogement(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        String url = "http://localhost:8080/logement/afficher";
+
+        // Construction de l'en-tête de la requête (header)
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Construction de la requête
+        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    requete,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+
+                if (reponse.getBody().equals("[]")) {
+                    return "Il n'y a pas de logements à afficher";
+                }
+
+                return reponse.getBody();
+
+            } else {
+                return "Affichage logement non réussi";
+
+            }
+
+        } catch (RestClientException e) {
+            return "Affichage logement non réussi";
+
+        }
+
+    }
+
     /**
      * Cette méthode permet de rassembler dans une map les données relatives à un
      * logement saisies au clavier par l'utilisateur.

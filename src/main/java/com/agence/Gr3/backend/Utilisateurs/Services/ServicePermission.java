@@ -22,6 +22,7 @@ public class ServicePermission {
     private final Deconnexion deconnexion;
     private final CreerLogement creerLogement;
     private final ModifierLogement modifierLogement;
+    private final AfficherLogement afficherLogement;
     private final ModifierProfil modifierProfil;
     private final CreerVisite creerVisite;
     private final ConfirmerVisite confirmerVisite;
@@ -35,6 +36,7 @@ public class ServicePermission {
             Deconnexion deconnexion,
             CreerLogement creerLogement,
             ModifierLogement modifierLogement,
+            AfficherLogement afficherLogement,
             ModifierProfil modifierProfil,
             CreerVisite creerVisite,
             ConfirmerVisite confirmerVisite,
@@ -45,6 +47,7 @@ public class ServicePermission {
         this.deconnexion = deconnexion;
         this.creerLogement = creerLogement;
         this.modifierLogement = modifierLogement;
+        this.afficherLogement = afficherLogement;
         this.modifierProfil = modifierProfil;
         this.creerVisite = creerVisite;
         this.confirmerVisite = confirmerVisite;
@@ -64,6 +67,8 @@ public class ServicePermission {
                 return creerLogement;
             case MODIFIER_LOGEMENT:
                 return modifierLogement;
+            case AFFICHER_LOGEMENT:
+                return afficherLogement;
             case MODIFIER_PROFIL:
                 return modifierProfil;
             case CREER_VISITE:

@@ -14,6 +14,7 @@ public enum Permission {
     DECONNEXION("Se deconnecter"),
     CREER_LOGEMENT("Ajouter un logement"),
     MODIFIER_LOGEMENT("Modifier un logement"),
+    AFFICHER_LOGEMENT("Afficher mes logements"),
     MODIFIER_PROFIL("Modifier son profil"),
     CREER_VISITE("Demander une visite"),
     CONFIRMER_VISITE("Confirmer une visite"),

@@ -151,10 +151,9 @@ public class ControleurLogement {
         }
     }
 
-    @GetMapping("/")
-    public ResponseEntity<String> rechercherTousLogement(@PathVariable int id,
-            @RequestHeader("Authorization") String authorizationHeader,
-            @RequestBody Map<String, Object> requestBody) {
+    @GetMapping("/afficher")
+    public ResponseEntity<Object> rechercherTousLogement(
+            @RequestHeader("Authorization") String authorizationHeader) {
 
         try {
             // Extraction et validation du Jwt reçu
@@ -164,38 +163,19 @@ public class ControleurLogement {
 
             // TODO Validation de la permission
 
-            // Validation du corps de la requête
-            if (requestBody == null) {
-                return new ResponseEntity<String>("Le corps de la requête est vide", HttpStatus.BAD_REQUEST);
-            }
-
-            if (id == 0) {
-                return new ResponseEntity<String>("Le paramètre de recherche est vide", HttpStatus.BAD_REQUEST);
-
-            }
-
             // Si tout est conforme, la méthode du service est appelée
-            Logement logement = serviceLogement.modifier(id, courriel, requestBody);
+            List<Logement> logements = serviceLogement.rechercher(courriel);
 
-            if (logement == null) {
-                return new ResponseEntity<String>("Logement non-enregistré", HttpStatus.INTERNAL_SERVER_ERROR);
+            if (logements == null) {
+                return new ResponseEntity<Object>(logements, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            return new ResponseEntity<String>("Logement enregitstré", HttpStatus.OK);
+            return new ResponseEntity<Object>(logements, HttpStatus.OK);
 
         } catch (Exception e) {
-            return new ResponseEntity<String>("Accès interdit", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<Object>("Accès interdit", HttpStatus.FORBIDDEN);
 
         }
-    }
-
-    @PostMapping("modifier")
-    public ResponseEntity<String> modifierLogement(@RequestBody Map<String, Object> requestBody) {
-
-        // tester si le logement appartient à l'utilisateur
-
-        return new ResponseEntity<String>("Logement modifié", HttpStatus.OK);
-
     }
 
     @PostMapping("activer")

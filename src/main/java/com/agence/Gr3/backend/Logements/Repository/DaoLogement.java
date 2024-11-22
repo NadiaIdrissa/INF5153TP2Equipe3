@@ -1,7 +1,6 @@
 package com.agence.Gr3.backend.Logements.Repository;
 
 import org.springframework.stereotype.Repository;
-import java.util.concurrent.atomic.AtomicInteger;
 import com.agence.Gr3.backend.Logements.Model.Logement;
 
 import java.util.ArrayList;
@@ -21,20 +20,16 @@ public class DaoLogement {
      */
     public Logement inserer(int id, Logement logement) {
         this.logements.put(id, logement);
-        System.out.println(logements); // DEBUG
-
         return lire(id);
 
     }
 
     public Logement modifier(int id, Logement logement) {
         this.logements.put(id, logement);
-        System.out.println(logements); // DEBUG
         return lire(id);
     }
 
     public Logement lire(int id) {
-        System.out.println(logements); // DEBUG
         return this.logements.get(id);
 
     }
@@ -46,7 +41,6 @@ public class DaoLogement {
      */
     public List<Logement> rechercher(String courriel) {
         List<Logement> logements = new ArrayList<>(this.logements.values());
-        System.out.println(logements); // DEBUG
         return logements;
 
     }
