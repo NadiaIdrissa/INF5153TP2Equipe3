@@ -92,4 +92,15 @@ public class ServiceLogement {
 
     }
 
+    /**
+     * Récupère les logements.
+     * 
+     * @return
+     */
+    public List<Logement> rechercherTous() {
+
+        return daoLogement.rechercherTous();
+
+    }
+
 }

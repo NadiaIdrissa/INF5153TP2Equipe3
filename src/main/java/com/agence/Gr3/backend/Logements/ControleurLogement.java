@@ -151,8 +151,8 @@ public class ControleurLogement {
         }
     }
 
-    @GetMapping("/afficher")
-    public ResponseEntity<Object> rechercherTousLogement(
+    @GetMapping("/afficher/utilisateur")
+    public ResponseEntity<Object> rechercherLogement(
             @RequestHeader("Authorization") String authorizationHeader) {
 
         try {
@@ -161,10 +161,38 @@ public class ControleurLogement {
             Claims claims = serviceJwt.validerJwt(jwt);
             String courriel = claims.getSubject();
 
+            System.out.println("Le courriel recu: " + courriel);
+
             // TODO Validation de la permission
 
             // Si tout est conforme, la méthode du service est appelée
             List<Logement> logements = serviceLogement.rechercher(courriel);
+
+            if (logements == null) {
+                return new ResponseEntity<Object>(logements, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            return new ResponseEntity<Object>(logements, HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<Object>("Accès interdit", HttpStatus.FORBIDDEN);
+
+        }
+    }
+
+    @GetMapping("/afficher")
+    public ResponseEntity<Object> rechercherTousLogements(
+            @RequestHeader("Authorization") String authorizationHeader) {
+
+        try {
+            // Extraction et validation du Jwt reçu
+            String jwt = serviceJwt.extraireJwt(authorizationHeader);
+            Claims claims = serviceJwt.validerJwt(jwt);
+
+            // TODO Validation de la permission
+
+            // Si tout est conforme, la méthode du service est appelée
+            List<Logement> logements = serviceLogement.rechercherTous();
 
             if (logements == null) {
                 return new ResponseEntity<Object>(logements, HttpStatus.INTERNAL_SERVER_ERROR);

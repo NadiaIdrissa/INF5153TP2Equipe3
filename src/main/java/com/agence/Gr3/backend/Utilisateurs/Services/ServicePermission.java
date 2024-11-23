@@ -23,6 +23,7 @@ public class ServicePermission {
     private final CreerLogement creerLogement;
     private final ModifierLogement modifierLogement;
     private final AfficherLogement afficherLogement;
+    private final AfficherTousLogements afficherTousLogements;
     private final ModifierProfil modifierProfil;
     private final CreerVisite creerVisite;
     private final ConfirmerVisite confirmerVisite;
@@ -37,6 +38,7 @@ public class ServicePermission {
             CreerLogement creerLogement,
             ModifierLogement modifierLogement,
             AfficherLogement afficherLogement,
+            AfficherTousLogements afficherTousLogements,
             ModifierProfil modifierProfil,
             CreerVisite creerVisite,
             ConfirmerVisite confirmerVisite,
@@ -48,6 +50,7 @@ public class ServicePermission {
         this.creerLogement = creerLogement;
         this.modifierLogement = modifierLogement;
         this.afficherLogement = afficherLogement;
+        this.afficherTousLogements = afficherTousLogements;
         this.modifierProfil = modifierProfil;
         this.creerVisite = creerVisite;
         this.confirmerVisite = confirmerVisite;
@@ -69,6 +72,8 @@ public class ServicePermission {
                 return modifierLogement;
             case AFFICHER_LOGEMENT:
                 return afficherLogement;
+            case AFFICHER_TOUS_LOGEMENTS:
+                return afficherTousLogements;
             case MODIFIER_PROFIL:
                 return modifierProfil;
             case CREER_VISITE:

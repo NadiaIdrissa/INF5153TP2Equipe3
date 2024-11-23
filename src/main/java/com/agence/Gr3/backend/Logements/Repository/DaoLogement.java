@@ -40,6 +40,29 @@ public class DaoLogement {
      * @return la liste de tous les logements
      */
     public List<Logement> rechercher(String courriel) {
+        System.out.println("Afficher mes Logements");
+
+        List<Logement> logementsTrouves = new ArrayList<>();
+
+        for (Map.Entry<Integer, Logement> entry : this.logements.entrySet()) {
+            Logement logement = entry.getValue();
+            if (logement.getIdRepresentant().equals(courriel)) {
+                logementsTrouves.add(logement);
+            }
+        }
+
+        return logementsTrouves;
+
+    }
+
+    /**
+     * Récupère tous les logements.
+     * 
+     * @return
+     */
+    public List<Logement> rechercherTous() {
+
+        System.out.println("Afficher tous les Logements");
         List<Logement> logements = new ArrayList<>(this.logements.values());
         return logements;
 

@@ -15,6 +15,7 @@ public enum Permission {
     CREER_LOGEMENT("Ajouter un logement"),
     MODIFIER_LOGEMENT("Modifier un logement"),
     AFFICHER_LOGEMENT("Afficher mes logements"),
+    AFFICHER_TOUS_LOGEMENTS("Afficher les logements"),
     MODIFIER_PROFIL("Modifier son profil"),
     CREER_VISITE("Demander une visite"),
     CONFIRMER_VISITE("Confirmer une visite"),

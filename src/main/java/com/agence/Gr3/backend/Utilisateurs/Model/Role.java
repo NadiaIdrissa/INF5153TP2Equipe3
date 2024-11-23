@@ -7,10 +7,11 @@ public enum Role {
     INVITE(List.of(Permission.CREER_UTILISATEUR, Permission.CONNEXION, Permission.QUITTER)),
     LOCATAIRE(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER)),
-    AGENT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
+    AGENT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL, Permission.AFFICHER_TOUS_LOGEMENTS,
             Permission.QUITTER)),
     REPRESENTANT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL, Permission.CREER_LOGEMENT,
-            Permission.MODIFIER_LOGEMENT, Permission.AFFICHER_LOGEMENT, Permission.QUITTER)),
+            Permission.MODIFIER_LOGEMENT, Permission.AFFICHER_LOGEMENT, Permission.AFFICHER_TOUS_LOGEMENTS,
+            Permission.QUITTER)),
     ADMIN(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER));
 
