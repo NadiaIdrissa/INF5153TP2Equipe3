@@ -2,126 +2,50 @@ package com.agence.Gr3.backend.Logements.Model;
 
 import com.agence.Gr3.Model.Adresse;
 
-public class Logement {
-    private int id;
-    private String idRepresentant;
-    private double nbrChambres;
-    private double nbrSallesDeBain;
-    private double superficie;
-    private String description;
-    private int dureeBail;
-    private Adresse adresse;
-    private boolean proprieteConfirmee;
-    private boolean disponible;
+public interface Logement {
 
-    // Private constructor to ensure Logement can only be created via the factory
-    protected Logement(int id, String idRepresentant, double nbrChambres, double nbrSallesDeBain,
-            double superficie, String description, int dureeBail, Adresse adresse,
-            boolean proprieteConfirmee, boolean disponible) {
-        this.id = id;
-        this.idRepresentant = idRepresentant;
-        this.nbrChambres = nbrChambres;
-        this.nbrSallesDeBain = nbrSallesDeBain;
-        this.superficie = superficie;
-        this.description = description;
-        this.dureeBail = dureeBail;
-        this.adresse = adresse;
-        this.proprieteConfirmee = proprieteConfirmee;
-        this.disponible = disponible;
-    }
+    public int getId();
 
-    public int getId() {
-        return id;
-    }
+    public void setId(int id);
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getIdGerant();
 
-    public String getIdRepresentant() {
-        return idRepresentant;
-    }
+    public void setIdGerant(String idGerant);
 
-    public void setIdRepresentant(String idRepresentant) {
-        this.idRepresentant = idRepresentant;
-    }
+    public Boolean getChauffage();
 
-    public double getNbrChambres() {
-        return nbrChambres;
-    }
+    public void setChauffage(Boolean chauffage);
 
-    public void setNbrChambres(double nbrChambres) {
-        this.nbrChambres = nbrChambres;
-    }
+    public Boolean getClimatisation();
 
-    public double getNbrSallesDeBain() {
-        return nbrSallesDeBain;
-    }
+    public void setClimatisation(Boolean climatisation);
 
-    public void setNbrSallesDeBain(double nbrSallesDeBain) {
-        this.nbrSallesDeBain = nbrSallesDeBain;
-    }
+    public Boolean getElectromenagers();
 
-    public double getSuperficie() {
-        return superficie;
-    }
+    public void setElectromenagers(Boolean electromenagers);
 
-    public void setSuperficie(double superficie) {
-        this.superficie = superficie;
-    }
+    public Boolean getWifi();
 
-    public String getDescription() {
-        return description;
-    }
+    public void setWifi(Boolean wifi);
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public Boolean getSemiMeuble();
 
-    public int getDureeBail() {
-        return dureeBail;
-    }
+    public void setSemiMeuble(Boolean semiMeuble);
 
-    public void setDureeBail(int dureeBail) {
-        this.dureeBail = dureeBail;
-    }
+    public Boolean getMeuble();
 
-    public Adresse getAdresse() {
-        return adresse;
-    }
+    public void setMeuble(Boolean meuble);
 
-    public void setAdresse(Adresse adresse) {
-        this.adresse = adresse;
-    }
+    public Double getTaille();
 
-    public boolean isProprieteConfirmee() {
-        return proprieteConfirmee;
-    }
+    public void setTaille(Double taille);
 
-    public void setProprieteConfirmee(boolean proprieteConfirmee) {
-        this.proprieteConfirmee = proprieteConfirmee;
-    }
+    public Double getPrix();
 
-    public boolean isDisponible() {
-        return disponible;
-    }
+    public void setPrix(Double prix);
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
-    }
+    public Adresse getAdresse();
 
-    @Override
-    public String toString() {
-        return "Logement \n" +
-                "id: " + id +
-                "\n idRepresentant: " + idRepresentant +
-                "\n nbrChambres: " + nbrChambres +
-                "\n nbrSallesDeBain: " + nbrSallesDeBain +
-                "\n superficie: " + superficie +
-                "\n description: " + description +
-                "\n dureeBail: " + dureeBail +
-                "\n adresse:" + adresse +
-                "\n proprieteConfirmee: " + proprieteConfirmee +
-                "\n disponible: " + disponible;
-    }
+    public void setAdresse(Adresse adresse);
+
 }

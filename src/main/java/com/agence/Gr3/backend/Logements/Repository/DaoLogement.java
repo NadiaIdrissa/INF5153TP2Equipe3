@@ -1,6 +1,7 @@
 package com.agence.Gr3.backend.Logements.Repository;
 
 import org.springframework.stereotype.Repository;
+
 import com.agence.Gr3.backend.Logements.Model.Logement;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class DaoLogement {
 
         for (Map.Entry<Integer, Logement> entry : this.logements.entrySet()) {
             Logement logement = entry.getValue();
-            if (logement.getIdRepresentant().equals(courriel)) {
+            if (logement.getIdGerant().equals(courriel)) {
                 logementsTrouves.add(logement);
             }
         }

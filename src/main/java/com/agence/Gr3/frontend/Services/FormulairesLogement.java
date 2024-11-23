@@ -1,9 +1,5 @@
 package com.agence.Gr3.frontend.Services;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,6 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 
@@ -35,8 +35,11 @@ public class FormulairesLogement {
         String url = "http://localhost:8080/logement/creer";
 
         // Construction du body (corps de la requête HTTP)
-        HashMap<String, Object> body = saisirLogement(scanner);
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("decorateurs", saisirDecorateurs(scanner));
+        body.put("adresse", saisirAdresse(scanner));
 
+        // Construction de l'en-tête de la requête (header)
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwt);
 
@@ -83,7 +86,9 @@ public class FormulairesLogement {
         headers.set("Authorization", "Bearer " + jwt);
 
         // Construction du body (corps de la requête HTTP)
-        HashMap<String, Object> body = saisirLogement(scanner);
+        HashMap<String, Object> body = new HashMap<>();
+        body.put("decorateurs", saisirDecorateurs(scanner));
+        body.put("adresse", saisirAdresse(scanner));
 
         // Construction de la requête
         HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
@@ -241,6 +246,50 @@ public class FormulairesLogement {
         logement.put("province", province);
 
         return logement;
+
+    }
+
+    private HashMap<String, Object> saisirDecorateurs(Scanner scanner) {
+
+        HashMap<String, Object> decorateurs = new HashMap<>();
+        int tailleLogementMin = 2;
+        int tailleLogementMax = 5;
+
+        decorateurs.put("chauffage", validationFormulaire.validationBooleen("Inclure le chauffage o/n?", scanner));
+        decorateurs.put("climatisation",
+                validationFormulaire.validationBooleen("Inclure la climatisation o/n?", scanner));
+        decorateurs.put("electromenagers",
+                validationFormulaire.validationBooleen("Inclure les electromenagers o/n?", scanner));
+        decorateurs.put("wifi", validationFormulaire.validationBooleen("Inclure le wifi o/n?", scanner));
+        decorateurs.put("semiMeuble", validationFormulaire.validationBooleen("Logement semi-meublé o/n?", scanner));
+
+        if (!((boolean) decorateurs.get("semiMeuble"))) {
+            decorateurs.put("meuble", validationFormulaire.validationBooleen("Logement meublé o/n?", scanner));
+        }
+
+        int taille = validationFormulaire.validationNombrePositifRange("Taille du logement (2,3,4 ou 5)", scanner,
+                tailleLogementMin, tailleLogementMax);
+
+        decorateurs.put("taille" + taille, true);
+
+        return decorateurs;
+
+    }
+
+    private HashMap<String, Object> saisirAdresse(Scanner scanner) {
+
+        HashMap<String, Object> adresse = new HashMap<>();
+
+        adresse.put("noCivique",
+                validationFormulaire.validationNombrePositif("Veuillez saisir le no civique: \n", scanner));
+        adresse.put("suite",
+                validationFormulaire.validationNombreOptionnel("Veuillez saisir la suite (optionnel): \n", scanner));
+        adresse.put("rue", validationFormulaire.validationNonNul("Veuillez saisir votre la rue: \n", scanner));
+        adresse.put("codePostal", validationFormulaire.validationNonNul("Veuillez saisir le code postal: \n", scanner));
+        adresse.put("ville", validationFormulaire.validationNonNul("Veuillez saisir la ville: \n", scanner));
+        adresse.put("province", validationFormulaire.validationNonNul("Veuillez saisir la province: \n", scanner));
+
+        return adresse;
 
     }
 

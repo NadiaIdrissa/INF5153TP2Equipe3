@@ -15,7 +15,7 @@ import com.agence.Gr3.backend.Logements.Services.ServiceLogement;
 import com.agence.Gr3.backend.Utilisateurs.Model.*;
 import com.agence.Gr3.backend.Utilisateurs.Repository.DaoUtilisateurs;
 import com.agence.Gr3.Model.Adresse;
-import com.agence.Gr3.backend.Logements.Model.Logement;
+import com.agence.Gr3.backend.Logements.Model.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
