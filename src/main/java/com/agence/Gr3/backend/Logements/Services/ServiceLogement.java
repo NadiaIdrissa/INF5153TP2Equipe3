@@ -44,8 +44,6 @@ public class ServiceLogement {
         Map<String, Object> decorateurs = (Map<String, Object>) requestBody.get("decorateurs");
         Map<String, Object> adresse = (Map<String, Object>) requestBody.get("adresse");
 
-        System.out.println("decorateurs et adresse marchent");
-
         int noCivique = (Integer) adresse.get("noCivique");
         int suite = (Integer) adresse.get("suite");
         String rue = adresse.get("rue").toString().trim();
@@ -57,24 +55,17 @@ public class ServiceLogement {
         Adresse adresseLogement = new Adresse(noCivique, suite, rue, codePostal, ville, province);
         LogementDeBase logementDeBase = fabriqueLogementDeBase.creerLogement(id, courriel, adresseLogement);
 
-        System.out.println("Après la fabrique" + logementDeBase);
-
         // Décoration du logement de base
         Logement logement = decorer(decorateurs, logementDeBase);
 
-        System.out.println(logement);
-
-        return daoLogement.inserer(id, logement); // daoLogement.inserer(id, logement);
+        return daoLogement.inserer(id, logement);
 
     }
 
     public Logement modifier(int id, String courriel, Map<String, Object> requestBody) {
 
-        System.out.println("methode: serviceLogement modifier"); // DEBUG
         Map<String, Object> decorateurs = (Map<String, Object>) requestBody.get("decorateurs");
         Map<String, Object> adresse = (Map<String, Object>) requestBody.get("adresse");
-
-        System.out.println("decorateurs et adresse marchent");
 
         int noCivique = (Integer) adresse.get("noCivique");
         int suite = (Integer) adresse.get("suite");
@@ -130,7 +121,6 @@ public class ServiceLogement {
                             logementDecore = new DecorateurElectromenagers(logementDecore);
                             break;
                         case "wifi":
-                            System.out.println("on entre dans le wifi ");
                             logementDecore = new DecorateurWifi(logementDecore);
                             break;
                         case "semiMeuble":

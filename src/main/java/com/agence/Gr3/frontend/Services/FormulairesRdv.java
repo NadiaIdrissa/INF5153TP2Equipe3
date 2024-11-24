@@ -104,15 +104,15 @@ public class FormulairesRdv {
                     String.class);
 
             if (reponse.getStatusCode() == HttpStatus.OK) {
-                return "Annulation réussie";
+                return "Confirmation réussie";
 
             } else {
-                return "Annulation non réussie";
+                return "Confirmation non réussie";
 
             }
 
         } catch (RestClientException e) {
-            return "Annulation non réussie";
+            return "Confirmation non réussie";
 
         }
 

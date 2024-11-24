@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.agence.Gr3.backend.Logements.Model.FabriqueLogementDeBase;
-import com.agence.Gr3.backend.Logements.Model.Logement;
-import com.agence.Gr3.backend.Logements.Repository.DaoLogement;
 import com.agence.Gr3.backend.RendezVous.Model.Rdv;
 import com.agence.Gr3.backend.RendezVous.Model.Statut;
 import com.agence.Gr3.backend.RendezVous.Repository.DaoRdv;
@@ -28,77 +25,81 @@ public class ServiceRdv {
         this.serviceLogement = serviceLogement;
     }
 
+    /**
+     * Crée un nouvel objet rendez-vous (Rdv) à partir des informations fournies
+     * dans le corps de la requête.
+     * 
+     * 
+     * 
+     * 
+     * @param courriel    Le courriel de l'utilisateur qui demande un rdv
+     * @param requestBody Le corps de la requête HTTP
+     * @return Le rdv inséré dans la
+     */
     public Rdv creer(String courriel, Map<String, Object> requestBody) {
 
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        try {
+        // Création d'un id
+        int id = atomicId.incrementAndGet();
 
-            System.out.println(requestBody);
-            System.out.println("ServiceRdv: creer");
+        // Extraction des information du corps de la requête HTTP
+        int idLogement = (Integer) requestBody.get("idLogement");
+        LocalDateTime dateHeurePropose = LocalDateTime.parse(requestBody.get("dateHeurePropose").toString(),
+                format);
 
-            // Création d'un id
-            int id = atomicId.incrementAndGet();
+        // Extraction du idGerant à partir du idLogement
+        String idGerant = serviceLogement.rechercherUnique(idLogement).getIdGerant();
 
-            // Extraction des information du corps de la requête HTTP
-            int idLogement = (Integer) requestBody.get("idLogement");
-            LocalDateTime dateHeurePropose = LocalDateTime.parse(requestBody.get("dateHeurePropose").toString(),
-                    format);
+        // Creation de l'objet Rdv
+        Rdv rdv = new Rdv(id, idLogement, courriel, idGerant, dateHeurePropose);
 
-            // Extraction du idGerant à partir du idLogement
-            String idGerant = serviceLogement.rechercherUnique(idLogement).getIdGerant();
-
-            // Creation de l'objet Rdv
-            Rdv rdv = new Rdv(id, idLogement, courriel, idGerant, dateHeurePropose);
-
-            return daoRdv.inserer(id, rdv);
-
-        } catch (Exception e) {
-            System.out.println("Exception while decorating: " + e.getMessage());
-            e.printStackTrace(); // This will print the full stack trace to understand where it went wrong
-        }
-
-        return null;
+        return daoRdv.inserer(id, rdv);
 
     }
 
-    public Rdv modifier(int id, String courriel, Map<String, Object> requestBody) {
+    public Rdv modifier(int idRdv, String idUtilisateur, Map<String, Object> requestBody) {
 
-        System.out.println("Rdv confirmé");
-        Rdv rdv = null;
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
-        // int idLogement, String idLocataire, String idGerant,LocalDateTime dateHeure
+        LocalDateTime dateHeurePropose = LocalDateTime.parse(requestBody.get("dateHeurePropose").toString(),
+                format);
+        // Le id de l'utilisateur est pour la notification
 
-        // daoRdv.inserer(idLogement, null);
-
-        return rdv;
-
-    }
-
-    public void confirmer(Rdv rdv, String idUtilisateur) {
-
-        if (rdv.getStatut() == Statut.ATTENTE) {
-            rdv.setStatut(Statut.CONFIRME);
-            rdv.notifierObservateurs(genererNotification(rdv, idUtilisateur, Statut.CONFIRME));
-        } else if (rdv.getStatut() == Statut.MODIFIE) {
-            rdv.setStatut(Statut.CONFIRME);
-            rdv.setDateHeure(rdv.getDateHeureProposee());
-            rdv.notifierObservateurs(genererNotification(rdv, idUtilisateur, Statut.CONFIRME));
-        }
+        return daoRdv.modifier(idRdv, dateHeurePropose);
 
     }
 
-    public Rdv confirmer(int id, String idUtilisateur) {
+    // LOGIQUE DE CRÉATION DES NOTIFICATION ET PERSISTANCE DES NOTIFICATIONS
 
-        System.out.println("Rdv confirmé");
+    /*
+     * public void confirmer(Rdv rdv, String idUtilisateur) {
+     * 
+     * if (rdv.getStatut() == Statut.ATTENTE) {
+     * rdv.setStatut(Statut.CONFIRME);
+     * rdv.notifierObservateurs(genererNotification(rdv, idUtilisateur,
+     * Statut.CONFIRME));
+     * } else if (rdv.getStatut() == Statut.MODIFIE) {
+     * rdv.setStatut(Statut.CONFIRME);
+     * rdv.setDateHeure(rdv.getDateHeureProposee());
+     * rdv.notifierObservateurs(genererNotification(rdv, idUtilisateur,
+     * Statut.CONFIRME));
+     * }
+     * 
+     * }
+     */
+    public Rdv confirmer(int idRdv, String idUtilisateur) {
 
-        return null;
+        // Le id de l'utilisateur est pour la notification
+
+        return daoRdv.confirmer(idRdv);
 
     }
 
-    public Rdv annuler(int id, String idUtilisateur) {
+    public Rdv annuler(int idRdv, String idUtilisateur) {
 
-        return null;
+        // Le id de l'utilisateur est pour la notification
+        return daoRdv.annuler(idRdv);
 
     }
 
@@ -116,30 +117,6 @@ public class ServiceRdv {
     public Rdv rechercher(int id) {
         return daoRdv.lire(id);
 
-    }
-
-    // Get the rendezvous
-
-    // rdv.setStatut(Statut.ANNULE);
-    // rdv.notifierObservateurs(genererNotification(rdv, idUtilisateur,
-    // Statut.ANNULE));
-
-    public void modifier(Rdv rdv, String idUtilisateur, LocalDateTime dateHeureProposee) {
-        rdv.setStatut(Statut.MODIFIE);
-        rdv.setDateHeureProposee(dateHeureProposee);
-        rdv.notifierObservateurs(genererNotification(rdv, idUtilisateur, Statut.MODIFIE));
-    }
-
-    private String genererNotification(Rdv rdv, String idUtilisateur, Statut statut) {
-        String notification = idUtilisateur + " " + statut.getText() + ": Logement:" + rdv.getIdLogement();
-
-        if (statut == Statut.MODIFIE) {
-            notification = notification + " Date et heure suggérée:" + rdv.getDateHeureProposee() +
-                    " Date et heure actuelle:" + rdv.getDateHeure();
-        }
-
-        notification = notification + " Date et heure:" + rdv.getDateHeure();
-        return notification;
     }
 
 }

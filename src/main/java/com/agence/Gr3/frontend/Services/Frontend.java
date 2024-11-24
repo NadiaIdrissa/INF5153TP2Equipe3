@@ -89,10 +89,7 @@ public class Frontend {
 
             // 3) Exécution de la commande et affichage du résultat.
             String resultat = commande.execute(permissions, scanner, JWT).toString();
-            System.out.println(resultat);
-
-            // DEBUG
-            System.out.println("Le JSON Web Token correspond à :" + JWT);
+            System.out.println("Résultats de la requête: \n" + resultat);
 
         }
     }

@@ -1,5 +1,6 @@
 package com.agence.Gr3.backend.RendezVous.Repository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,28 +8,41 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.agence.Gr3.backend.Logements.Model.Logement;
-import com.agence.Gr3.backend.RendezVous.Model.Rdv;
+import com.agence.Gr3.backend.RendezVous.Model.*;
 
 @Repository
 public class DaoRdv {
 
     private final Map<Integer, Rdv> rdvs = new HashMap<Integer, Rdv>();
 
-    public Rdv inserer(int id, Rdv rdv) {
-
+    public Rdv inserer(int idRdv, Rdv rdv) {
         System.out.println("DaoRdv: inserer");
-        this.rdvs.put(id, rdv);
-        return lire(id);
+        this.rdvs.put(idRdv, rdv);
+        return lire(idRdv);
     }
 
-    public Rdv modifier(int id, Rdv rdv) {
-        this.rdvs.put(id, rdv);
-        return lire(id);
+    public Rdv modifier(int idRdv, LocalDateTime localDateTime) {
+        Rdv rdv = lire(idRdv);
+        rdv.setStatut(Statut.MODIFIE);
+        rdv.setDateHeureProposee(localDateTime);
+        return rdv;
     }
 
-    public Rdv lire(int id) {
-        return this.rdvs.get(id);
+    public Rdv annuler(int idRdv) {
+        Rdv rdv = lire(idRdv);
+        rdv.setStatut(Statut.ANNULE);
+        return rdv;
+    }
+
+    public Rdv confirmer(int idRdv) {
+        Rdv rdv = lire(idRdv);
+        rdv.setStatut(Statut.CONFIRME);
+        rdv.setDateHeure(rdv.getDateHeureProposee());
+        return rdv;
+    }
+
+    public Rdv lire(int idRdv) {
+        return this.rdvs.get(idRdv);
     }
 
     public List<Rdv> rechercher(String courriel) {

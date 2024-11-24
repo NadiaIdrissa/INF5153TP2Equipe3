@@ -8,8 +8,8 @@ public class HistoriqueNotifications implements Observateur {
     private List<String> notifications;
 
     @Override
-    public void mettreAJour(String modification) {
-        notifications.add(modification);
+    public void mettreAJour(String notification) {
+        notifications.add(notification);
 
     }
 

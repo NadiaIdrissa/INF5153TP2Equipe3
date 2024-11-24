@@ -132,12 +132,9 @@ public class ControleurRdv {
 
             if (id == 0) {
                 return new ResponseEntity<String>("Le paramètre de recherche est vide", HttpStatus.BAD_REQUEST);
-
             }
 
-            // Valider que le rendez-vous existe et que l'utilisateur est un des
-            // participants
-
+            // Valider: le rendez-vous existe et l'utilisateur est un des participants
             Rdv rdv = serviceRdv.rechercher(id);
 
             if (rdv == null) {
@@ -204,9 +201,7 @@ public class ControleurRdv {
 
             }
 
-            // Valider que le rendez-vous existe et que l'utilisateur est un des
-            // participants
-
+            // Valider: le rendez-vous existe et l'utilisateur est un des participants
             Rdv rdv = serviceRdv.rechercher(id);
 
             if (rdv == null) {
@@ -273,8 +268,7 @@ public class ControleurRdv {
 
             }
 
-            // Valider que le rendez-vous existe et que l'utilisateur est un des
-            // participants
+            // Le rendez-vous existe et l'utilisateur est un des participants
             Rdv rdv = serviceRdv.rechercher(id);
 
             if (rdv == null) {
