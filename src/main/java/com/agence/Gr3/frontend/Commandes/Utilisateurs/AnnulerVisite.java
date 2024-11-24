@@ -11,19 +11,19 @@ import com.agence.Gr3.frontend.Commandes.Commande;
 import com.agence.Gr3.frontend.Services.FormulairesRdv;
 
 @Component
-public class ConfirmerVisite implements Commande<StringBuilder, String> {
+public class AnnulerVisite implements Commande<StringBuilder, String> {
 
     private FormulairesRdv formulairesRdv;
 
     @Autowired
-    public ConfirmerVisite(FormulairesRdv formulairesRdv) {
+    public AnnulerVisite(FormulairesRdv formulairesRdv) {
         this.formulairesRdv = formulairesRdv;
 
     }
 
     @Override
     public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
-        return formulairesRdv.confirmerVisite(permissions, scanner, JWT);
+        return formulairesRdv.annulerVisite(permissions, scanner, JWT);
 
     }
 

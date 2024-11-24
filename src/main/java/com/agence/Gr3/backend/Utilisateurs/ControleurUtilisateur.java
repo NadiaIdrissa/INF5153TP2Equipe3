@@ -50,10 +50,6 @@ public class ControleurUtilisateur {
                 roleUtilisateur = Role.REPRESENTANT;
                 break;
 
-            case "agent":
-                roleUtilisateur = Role.AGENT;
-                break;
-
             default:
                 roleUtilisateur = Role.LOCATAIRE;
 

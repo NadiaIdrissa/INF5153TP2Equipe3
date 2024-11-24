@@ -8,22 +8,22 @@ import org.springframework.stereotype.Component;
 
 import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 import com.agence.Gr3.frontend.Commandes.Commande;
-import com.agence.Gr3.frontend.Services.FormulairesUtilisateur;
+import com.agence.Gr3.frontend.Services.FormulairesRdv;
 
 @Component
 public class CreerVisite implements Commande<StringBuilder, String> {
 
-    private FormulairesUtilisateur formulairesUtilisateur;
+    private FormulairesRdv formulairesRdv;
 
     @Autowired
-    public CreerVisite(FormulairesUtilisateur formulairesUtilisateur) {
-        this.formulairesUtilisateur = formulairesUtilisateur;
+    public CreerVisite(FormulairesRdv formulairesRdv) {
+        this.formulairesRdv = formulairesRdv;
 
     }
 
     @Override
     public String execute(List<Permission> permissions, Scanner scanner, StringBuilder JWT) {
-        return formulairesUtilisateur.demanderVisite(permissions, scanner, JWT);
+        return formulairesRdv.demanderVisite(permissions, scanner, JWT);
 
     }
 

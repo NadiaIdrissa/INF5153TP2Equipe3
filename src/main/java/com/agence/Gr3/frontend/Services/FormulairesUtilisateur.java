@@ -4,23 +4,16 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import com.agence.Gr3.backend.Utilisateurs.Model.Permission;
 import com.agence.Gr3.backend.Utilisateurs.Model.Role;
-
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Enumeration;
 import java.util.List;
 
 @Service
@@ -35,31 +28,6 @@ public class FormulairesUtilisateur {
         this.validationFormulaire = validationFormulaire;
 
     }
-
-    /*
-     * COMMENTAIRE GÉNÉRAL
-     * 
-     * Toutes les méthodes de la classe sont construites de la même façon, dans le
-     * but de simuler la complétion et l'envoi d'un formulaire au backend via une
-     * requête HTTP ainsi que de gérer la réponse HTTP obtenue de celui-ci.
-     * 
-     * 
-     * 
-     * Chaque méthode:
-     * 1) demande à l'utilisateur de saisir les données requises.
-     * 2) affecte ces données aux variables
-     * 3) ajoute les variables à une structure de type MultiValueMap, représentant
-     * le body de la requête http.
-     * 4) envoie au bon endpoint la requête http du type appropriée contenant le
-     * body.
-     * 5) retourne une réponse HTTP.
-     * 6) les éléments de la réponse sont utilisés
-     * 
-     * Note: les paramètres ne sont pas tous nécessairement utilisés, l'objectif est
-     * d'avoir des méthodes uniformes pour simplifier leur code d'invocation.
-     * 
-     * 
-     */
 
     /**
      * Crée un compte utilisateur de type "LOCATAIRE" en envoyant une requête POST
@@ -122,36 +90,6 @@ public class FormulairesUtilisateur {
         body.put("courriel", courriel);
         body.put("mdp", mdp);
         body.put("role", "representant");
-
-        return restTemplate.postForObject(url, body, String.class);
-    }
-
-    /**
-     * Crée un compte utilisateur de type "AGENT" en envoyant une requête POST
-     * à un serveur backend pour enregistrer l'utilisateur avec les informations
-     * saisies dans la console (adresse courriel, mot de passe).
-     * 
-     * Cette méthode récupère les informations nécessaires (courriel, mot de passe)
-     * auprès de l'utilisateur via un scanner, les encapsule dans un objet
-     * `MultiValueMap` et les envoie au serveur via une requête POST.
-     * 
-     * @return La réponse du serveur sous forme de chaîne de caractères.
-     * @throws RestClientException Si une erreur survient lors de l'exécution de la
-     *                             requête HTTP.
-     */
-    public String creerAgent(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
-            throws RestClientException {
-        String url = "http://localhost:8080/utilisateur/creer";
-
-        // Récupération des informations et affectation aux variables.
-        String courriel = validationFormulaire.validationNonNul("Veuillez saisir votre adresse courriel: \n", scanner);
-        String mdp = validationFormulaire.validationNonNul("Veuillez saisir votre mot de passe: \n", scanner);
-
-        // Construction du body (corps de la requête HTTP)
-        HashMap<String, String> body = new HashMap<>();
-        body.put("courriel", courriel);
-        body.put("mdp", mdp);
-        body.put("role", "agent");
 
         return restTemplate.postForObject(url, body, String.class);
     }
@@ -303,154 +241,6 @@ public class FormulairesUtilisateur {
         } catch (RestClientException e) {
 
             return "modification du profil non réussie";
-
-        }
-
-    }
-
-    public String demanderVisite(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
-            throws RestClientException {
-
-        String url = "http://localhost:8080/logement/modifier";
-
-        // Construction du body (corps de la requête HTTP)
-        HashMap<String, Object> body = new HashMap<>();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
-
-        // Le constructeur attend le body comme premier paramètre
-        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
-
-        try {
-
-            ResponseEntity<String> reponse = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    requete,
-                    String.class);
-
-            if (reponse.getStatusCode() == HttpStatus.OK) {
-                return "ajout visite réussie";
-
-            } else {
-                return "ajout visite non réussie";
-
-            }
-
-        } catch (RestClientException e) {
-            return "ajout visite non réussie";
-
-        }
-
-    }
-
-    public String confirmerVisite(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
-            throws RestClientException {
-
-        String url = "http://localhost:8080/logement/modifier";
-
-        // Construction du body (corps de la requête HTTP)
-        HashMap<String, Object> body = new HashMap<>();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
-
-        // Le constructeur attend le body comme premier paramètre
-        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(body, headers);
-
-        try {
-
-            ResponseEntity<String> reponse = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    requete,
-                    String.class);
-
-            if (reponse.getStatusCode() == HttpStatus.OK) {
-                return "ajout réussie";
-
-            } else {
-                return "confirmation non réussie";
-
-            }
-
-        } catch (RestClientException e) {
-            return "confirmation non réussie";
-
-        }
-
-    }
-
-    public String modifierAnnonce(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
-            throws RestClientException {
-
-        String url = "http://localhost:8080/annonce/modifier";
-
-        // Construction du body (corps de la requête HTTP)
-        HashMap<String, Object> body = new HashMap<>();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
-
-        // Le constructeur attend le body comme premier paramètre
-        HttpEntity<HashMap<String, Object>> entite = new HttpEntity<>(body, headers);
-
-        try {
-
-            ResponseEntity<String> reponse = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    entite,
-                    String.class);
-
-            if (reponse.getStatusCode() == HttpStatus.OK) {
-                return "modification d'annonce réussie";
-
-            } else {
-                return "modification d'annonce non réussie";
-
-            }
-
-        } catch (RestClientException e) {
-            return "modification d'anonce non réussie";
-
-        }
-
-    }
-
-    public String creerAnnonce(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
-            throws RestClientException {
-
-        String url = "http://localhost:8080/annonce/modifier";
-
-        // Construction du body (corps de la requête HTTP)
-        HashMap<String, Object> body = new HashMap<>();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + jwt);
-
-        // Le constructeur attend le body comme premier paramètre
-        HttpEntity<HashMap<String, Object>> entite = new HttpEntity<>(body, headers);
-
-        try {
-
-            ResponseEntity<String> reponse = restTemplate.exchange(
-                    url,
-                    HttpMethod.POST,
-                    entite,
-                    String.class);
-
-            if (reponse.getStatusCode() == HttpStatus.OK) {
-                return "ajout d'annonce réussie";
-
-            } else {
-                return "ajout d'annonce non réussie";
-
-            }
-
-        } catch (RestClientException e) {
-            return "ajout d'annonce non réussie";
 
         }
 

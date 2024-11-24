@@ -36,6 +36,26 @@ public class ControleurLogement {
 
     }
 
+    /**
+     * S'occupe de l'insertion d'un logement dans la BD.
+     * Traite la requête HTTP de type POST sur le endpoint /logement/creer.
+     * Valide le jwt et le corps (body) de la requête. Une réponse HTTP défavorable
+     * est renvoyée en cas d'erreur. S'il n'y a pas d'erreurs, un
+     * appel est fait à la méthode "creer" du ServiceLogement en passant comme
+     * paramètres le corps de la requête HTTP et le courriel extrait du jwt.
+     * Si cet appel n'est pas un succès, une réponse HTTP défavorable
+     * sera renvoyée. En cas de succès, une réponse HTTP.Ok sera renvoyée.
+     *
+     * 
+     * 
+     * @param authorizationHeader l'en-tête d'autorisation contenant l'identifiant
+     *                            de l'utilisateur (courriel)
+     * @param requestBody         les données relatives au logement à insérer dans
+     *                            la BD
+     * @return une réponse HTTP indiquant si l'insertion du logement est un succès
+     *         ou un
+     *         échec.
+     */
     @PostMapping("creer")
     public ResponseEntity<String> creerLogement(@RequestHeader("Authorization") String authorizationHeader,
             @RequestBody Map<String, Object> requestBody) {
@@ -77,6 +97,25 @@ public class ControleurLogement {
 
     }
 
+    /**
+     * S'occupe de la modification d'un logement dans la BD.
+     * Traite la requête HTTP de type PUT sur le endpoint /logement/modifier/{id}.
+     * Valide le jwt et le corps (body) de la requête. Une réponse HTTP défavorable
+     * est renvoyée en cas d'erreur. S'il n'y a pas d'erreurs, un
+     * appel est fait à la méthode "modifier" du ServiceLogement en passant comme
+     * paramètres l'identifiant du logement à modifier, le corps de la requête HTTP
+     * et le courriel extrait du jwt. Si cet appel n'est pas un succès, une réponse
+     * HTTP défavorable sera renvoyée. En cas de succès, une réponse HTTP.Ok sera
+     * renvoyée.
+     * 
+     * @param id                  identifiant du logement à modifier
+     * @param authorizationHeader l'en-tête d'autorisation contenant l'identifiant
+     *                            de l'utilisateur (courriel)
+     * @param requestBody         les données relatives au rdv à insérer dans
+     *                            la BD
+     * @return une réponse HTTP indiquant si la modification du logement est un
+     *         succès ou un échec.
+     */
     @PutMapping("/modifier/{id}")
     public ResponseEntity<String> modifierLogement(@PathVariable int id,
             @RequestHeader("Authorization") String authorizationHeader,
@@ -151,6 +190,21 @@ public class ControleurLogement {
         }
     }
 
+    /**
+     * S'occupe de la récupération, à partir de la BD ,des logements associés à un
+     * utilisateur. Traite la requête HTTP de type GET sur le endpoint
+     * /logement/afficher/utilisateur. Valide le jwt et le corps (body) de la
+     * requête. Une réponse HTTP défavorable est renvoyée en cas d'erreur. S'il n'y
+     * a pas d'erreurs, un appel est fait à la méthode "rechercher" du
+     * ServiceLogement en passant comme paramètre le courriel extrait du jwt. Si cet
+     * appel n'est pas un succès, une réponse HTTP défavorable sera renvoyée. En cas
+     * de succès, une réponse HTTP.Ok sera renvoyée.
+     * 
+     * @param authorizationHeader l'en-tête d'autorisation contenant l'identifiant
+     *                            de l'utilisateur (courriel)
+     * @return une réponse HTTP indiquant si la récupération des logements est un
+     *         succès ou un échec.
+     */
     @GetMapping("/afficher/utilisateur")
     public ResponseEntity<Object> rechercherLogement(
             @RequestHeader("Authorization") String authorizationHeader) {
@@ -180,6 +234,19 @@ public class ControleurLogement {
         }
     }
 
+    /**
+     * S'occupe de la récupération, à partir de la BD ,de tous les logements.
+     * Traite la requête HTTP de type GET sur le endpoint /logement/afficher.
+     * Valide le jwt et le corps (body) de la requête. Une réponse HTTP défavorable
+     * est renvoyée en cas d'erreur. S'il n'y a pas d'erreurs, un appel est fait à
+     * la méthode "rechercher" du ServiceLogement en passant comme paramètre le
+     * courriel extrait du jwt. Si cet appel n'est pas un succès, une réponse HTTP
+     * défavorable sera renvoyée. En cas de succès, une réponse HTTP.Ok sera
+     * renvoyée.
+     * 
+     * @param authorizationHeader
+     * @return
+     */
     @GetMapping("/afficher")
     public ResponseEntity<Object> rechercherTousLogements(
             @RequestHeader("Authorization") String authorizationHeader) {
@@ -204,16 +271,6 @@ public class ControleurLogement {
             return new ResponseEntity<Object>("Accès interdit", HttpStatus.FORBIDDEN);
 
         }
-    }
-
-    @PostMapping("activer")
-    public ResponseEntity<String> activerLogement(@RequestBody Map<String, Object> requestBody) {
-
-        // tester si le logement appartient à l'utilisateur
-        // Activé ou désactivé en fonction du nouvel état
-
-        return new ResponseEntity<String>("Logement activé", HttpStatus.OK);
-
     }
 
 }

@@ -19,8 +19,8 @@ public enum Permission {
     MODIFIER_PROFIL("Modifier son profil"),
     CREER_VISITE("Demander une visite"),
     CONFIRMER_VISITE("Confirmer une visite"),
-    CREER_ANNONCE("Créer une annonce"),
-    MODIFIER_ANNONCE("Modifier une annonce"),
+    ANNULER_VISITE("Annuler une visite"),
+    MODIFIER_VISITE("Modifier une visite"),
     QUITTER("Quitter l'application");
 
     private String description;

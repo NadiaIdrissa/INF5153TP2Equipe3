@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.agence.Gr3.backend.Logements.Model.LogementDeBase;
-import com.agence.Gr3.backend.Logements.Model.Logement;;
+import com.agence.Gr3.backend.Logements.Model.Logement;
 
 @Service
 public class ServiceLogement {
@@ -161,7 +161,7 @@ public class ServiceLogement {
 
         } catch (Exception e) {
             System.out.println("Exception while decorating: " + e.getMessage());
-            e.printStackTrace(); // This will print the full stack trace to understand where it went wrong
+            e.printStackTrace();
         }
 
         return logementDecore;
@@ -187,6 +187,17 @@ public class ServiceLogement {
     public List<Logement> rechercherTous() {
 
         return daoLogement.rechercherTous();
+
+    }
+
+    /**
+     * Récupère les logements.
+     * 
+     * @return
+     */
+    public Logement rechercherUnique(int id) {
+
+        return daoLogement.lire(id);
 
     }
 

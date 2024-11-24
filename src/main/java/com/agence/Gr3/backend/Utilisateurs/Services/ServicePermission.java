@@ -27,8 +27,8 @@ public class ServicePermission {
     private final ModifierProfil modifierProfil;
     private final CreerVisite creerVisite;
     private final ConfirmerVisite confirmerVisite;
-    private final CreerAnnonce creerAnnonce;
-    private final ModifierAnnonce modifierAnnonce;
+    private final AnnulerVisite annulerVisite;
+    private final ModifierVisite modifierVisite;
 
     @Autowired
     public ServicePermission(
@@ -42,8 +42,8 @@ public class ServicePermission {
             ModifierProfil modifierProfil,
             CreerVisite creerVisite,
             ConfirmerVisite confirmerVisite,
-            CreerAnnonce creerAnnonce,
-            ModifierAnnonce modifierAnnonce) {
+            AnnulerVisite annulerVisite,
+            ModifierVisite modifierVisite) {
         this.creerUtilisateur = creerUtilisateur;
         this.connexion = connexion;
         this.deconnexion = deconnexion;
@@ -54,8 +54,9 @@ public class ServicePermission {
         this.modifierProfil = modifierProfil;
         this.creerVisite = creerVisite;
         this.confirmerVisite = confirmerVisite;
-        this.creerAnnonce = creerAnnonce;
-        this.modifierAnnonce = modifierAnnonce;
+        this.annulerVisite = annulerVisite;
+        this.modifierVisite = modifierVisite;
+
     }
 
     public Commande<StringBuilder, String> getForPermission(Permission permission) {
@@ -78,12 +79,12 @@ public class ServicePermission {
                 return modifierProfil;
             case CREER_VISITE:
                 return creerVisite;
+            case ANNULER_VISITE:
+                return annulerVisite;
+            case MODIFIER_VISITE:
+                return modifierVisite;
             case CONFIRMER_VISITE:
                 return confirmerVisite;
-            case CREER_ANNONCE:
-                return creerAnnonce;
-            case MODIFIER_ANNONCE:
-                return modifierAnnonce;
 
             default:
                 throw new IllegalArgumentException("Unknown permission: " + permission);
