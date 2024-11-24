@@ -10,6 +10,7 @@ public enum Role {
     REPRESENTANT(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL, Permission.CREER_LOGEMENT,
             Permission.MODIFIER_LOGEMENT, Permission.AFFICHER_LOGEMENT, Permission.AFFICHER_TOUS_LOGEMENTS,
             Permission.CREER_VISITE, Permission.MODIFIER_VISITE, Permission.ANNULER_VISITE, Permission.CONFIRMER_VISITE,
+            Permission.AFFICHER_VISITES,
             Permission.QUITTER)),
     ADMIN(List.of(Permission.DECONNEXION, Permission.MODIFIER_PROFIL,
             Permission.QUITTER));

@@ -211,4 +211,46 @@ public class FormulairesRdv {
 
     }
 
+    public String afficherVisites(List<Permission> permissions, Scanner scanner, StringBuilder jwt)
+            throws RestClientException {
+
+        System.out.println("Afficher Rdvs");
+
+        String url = "http://localhost:8080/rdv/afficher/utilisateur";
+
+        // Construction de l'en-tête de la requête (header)
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + jwt);
+
+        // Construction de la requête
+        HttpEntity<HashMap<String, Object>> requete = new HttpEntity<>(headers);
+
+        try {
+
+            ResponseEntity<String> reponse = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    requete,
+                    String.class);
+
+            if (reponse.getStatusCode() == HttpStatus.OK) {
+
+                if (reponse.getBody().equals("[]")) {
+                    return "Il n'y a pas de rdvs à afficher";
+                }
+
+                return reponse.getBody();
+
+            } else {
+                return "Affichage rdv non réussi";
+
+            }
+
+        } catch (RestClientException e) {
+            return "Affichage rdv non réussi";
+
+        }
+
+    }
+
 }
