@@ -2,7 +2,7 @@ package com.agence.Gr3.backend.Utilisateurs.Model;
 
 import java.util.List;
 
-public class BuilderUtilisateur {
+public class BuilderUtilisateur implements Builder {
 
     private Identifiant identifiant;
     private Role role;
@@ -13,7 +13,11 @@ public class BuilderUtilisateur {
     private List<String> annonces;
     private List<String> locateurs;
 
+    public BuilderUtilisateur() {
+    };
+
     // Attributs minimums requis pour un compte d'utilisateur
+
     public BuilderUtilisateur(Identifiant identifiant, Role role) {
         this.identifiant = identifiant;
         this.role = role;
@@ -21,26 +25,50 @@ public class BuilderUtilisateur {
 
     }
 
+    @Override
+    public BuilderUtilisateur setIdentifiant(Identifiant identifiant) {
+        this.identifiant = identifiant;
+        return this;
+    }
+
+    @Override
+    public BuilderUtilisateur setRole(Role role) {
+        this.role = role;
+        return this;
+    }
+
+    @Override
+    public BuilderUtilisateur setStatut(String notifications) {
+        this.statut = statut;
+        return this;
+    }
+
+    @Override
+    public BuilderUtilisateur setProfil(Profil profil) {
+        this.profil = profil;
+        return this;
+    }
+
+    @Override
     public BuilderUtilisateur setNotifications(List<String> notifications) {
         this.notifications = notifications;
         return this;
     }
 
-    public BuilderUtilisateur setIdentifiant(Identifiant identifiant) {
-        this.identifiant = identifiant;
-        return this;
-    }
+    @Override
 
     public BuilderUtilisateur setCalendrier(List<String> calendrier) {
         this.calendrier = calendrier;
         return this;
     }
 
+    @Override
     public BuilderUtilisateur setAnnonces(List<String> annonces) {
         this.annonces = annonces;
         return this;
     }
 
+    @Override
     public BuilderUtilisateur setLocateurs(List<String> locateurs) {
         this.locateurs = locateurs;
         return this;

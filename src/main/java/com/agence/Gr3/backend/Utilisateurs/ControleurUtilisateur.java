@@ -39,33 +39,40 @@ public class ControleurUtilisateur {
 
         Role roleUtilisateur;
 
-        switch (role) {
-
-            case "representant":
-                roleUtilisateur = Role.REPRESENTANT;
-                break;
-
-            default:
-                roleUtilisateur = Role.LOCATAIRE;
-
-        }
-
+        /*
+         * switch (role) {
+         * 
+         * case "representant":
+         * roleUtilisateur = Role.REPRESENTANT;
+         * break;
+         * 
+         * default:
+         * roleUtilisateur = Role.LOCATAIRE;
+         * 
+         * }
+         */
         // Création et insertion d'un utilisateur
         Identifiant identifant = new Identifiant(courriel, mdp);
 
-        System.out.println("Role recu: " + role);
-        System.out.println("ROLE DE L'UTILISATEUR : " + roleUtilisateur);
-
-        // Chercher
+        // Chercher si l'utilisateur existe déjà
         if (daoUtilisateurs.lire(identifant.getCourriel()) != null) {
             return new ResponseEntity<String>("Erreur: l'utilisateur existe déjà!", HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
 
-        BuilderUtilisateur builder = new BuilderUtilisateur(identifant, roleUtilisateur);
-        Utilisateur utilisateur = builder.build();
+        BuilderUtilisateur builder = new BuilderUtilisateur();
+        Director director = new Director();
 
-        daoUtilisateurs.inserer(courriel, utilisateur);
+        if (role.equals("representant")) {
+
+            daoUtilisateurs.inserer(courriel, director.creerRepresentant(builder, identifant).build());
+
+        }
+        if (role.equals("locataire")) {
+
+            daoUtilisateurs.inserer(courriel, director.creerLocataire(builder, identifant).build());
+
+        }
 
         return new ResponseEntity<String>("Utilisateur enregitstré", HttpStatus.OK);
 

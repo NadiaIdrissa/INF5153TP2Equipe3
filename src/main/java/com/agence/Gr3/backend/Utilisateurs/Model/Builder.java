@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Builder {
 
+    Builder setIdentifiant(Identifiant identifiant);
+
     Builder setRole(Role role);
 
     Builder setStatut(String statut);
@@ -12,12 +14,12 @@ public interface Builder {
 
     Builder setNotifications(List<String> notifications);
 
-    Builder setIdentifiant(Identifiant identifiant);
-
     Builder setCalendrier(List<String> calendrier);
 
     Builder setAnnonces(List<String> annonces);
 
     Builder setLocateurs(List<String> locateurs);
+
+    Utilisateur build();
 
 }
