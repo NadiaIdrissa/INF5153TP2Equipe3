@@ -7,9 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Rdv implements Sujet {
-
-    private List<Observateur> observateurs = new ArrayList<>();
+public class Rdv {
 
     private int id;
     private int idLogement;
@@ -28,28 +26,7 @@ public class Rdv implements Sujet {
         this.idGerant = idGerant;
         this.dateHeureProposee = dateHeureProposee;
         this.statut = Statut.ATTENTE;
-
-        // Ne pas oublier de subscribe les observateurs
-
     }
-
-    @Override
-    public void ajouterObservateur(Observateur observateur) {
-        observateurs.add(observateur);
-    };
-
-    @Override
-    public void retirerObservateur(Observateur observateur) {
-        observateurs.remove(observateur);
-    };
-
-    @Override
-    public void notifierObservateurs(String notification) {
-        for (Observateur observateur : observateurs) {
-            observateur.mettreAJour(notification);
-        }
-
-    };
 
     public int getId() {
         return id;
@@ -109,59 +86,6 @@ public class Rdv implements Sujet {
 
     public void setModification(String modification) {
         this.modification = modification;
-    }
-
-    /**
-     * La méthode accepte les modifications, ou confir
-     * 
-     * 
-     * @param idUtilisateur
-     */
-    public void accepter(String idUtilisateur) {
-
-        if (this.statut == Statut.ATTENTE) {
-
-            setStatut(statut.CONFIRME);
-
-            notifierObservateurs(genererNotification(idUtilisateur, statut));
-        } else if (this.statut == Statut.MODIFIE) {
-            setStatut(statut.CONFIRME);
-            setDateHeure(this.dateHeureProposee);
-
-            notifierObservateurs(genererNotification(idUtilisateur, statut));
-        }
-
-    }
-
-    public void annulerRdv(String idUtilisateur) {
-        setStatut(statut.ANNULE);
-        notifierObservateurs(genererNotification(idUtilisateur, this.statut));
-
-    }
-
-    public void modifierRdv(String idUtilisateur, LocalDateTime dateHeureProposee) {
-        setStatut(statut.MODIFIE);
-
-        this.dateHeureProposee = dateHeureProposee;
-        notifierObservateurs(genererNotification(idUtilisateur, this.statut));
-
-    }
-
-    private String genererNotification(String idUtilisateur, Statut statut) {
-
-        String notification = idUtilisateur + statut.getText() + ": Logement:" + this.idLogement;
-
-        if (statut == Statut.MODIFIE) {
-
-            notification = notification + "Date et heure suggérée:" + this.dateHeureProposee + "Date et heure actuelle:"
-                    + this.dateHeure;
-
-        }
-
-        notification = notification + "Date et heure:" + this.dateHeure;
-
-        return notification;
-
     }
 
 }

@@ -33,14 +33,9 @@ public class ControleurUtilisateur {
     @PostMapping("/creer")
     public ResponseEntity<String> creerUtilisateur(@RequestBody HashMap<String, String> requestBody) {
 
-        System.out.println("CONTROLEUR UTILISATEUR"); // DEBUGG
-
         String courriel = requestBody.get("courriel").toString().trim();
         String mdp = requestBody.get("mdp").toString().trim();
         String role = requestBody.get("role").toString().trim();
-
-        System.out.println("courriel recu: " + courriel);// DEBUGG
-        System.out.println("mot de passe recu: " + mdp);// DEBUGG
 
         Role roleUtilisateur;
 
@@ -69,8 +64,7 @@ public class ControleurUtilisateur {
 
         BuilderUtilisateur builder = new BuilderUtilisateur(identifant, roleUtilisateur);
         Utilisateur utilisateur = builder.build();
-        // Comme la BD est une MAP qui contient des paires clé valeur
-        // la clé est le courriel et la valeur l'utilisateur.
+
         daoUtilisateurs.inserer(courriel, utilisateur);
 
         return new ResponseEntity<String>("Utilisateur enregitstré", HttpStatus.OK);
@@ -163,22 +157,15 @@ public class ControleurUtilisateur {
         } else if (!utilisateur.getIdentifiant().getMdp().equals(mdp)) {
 
             String mdpBD = utilisateur.getIdentifiant().getMdp();
-
-            System.out.println(mdpBD + " de taille " + mdpBD.length());
-            System.out.println(mdp + " de taille " + mdp.length());
-
             System.out.println("mot de passe BD: " + utilisateur.getIdentifiant().getMdp());
             Identifiant identifiant = utilisateur.getIdentifiant();
             String courriel2 = identifiant.getCourriel();
             String statut = utilisateur.getStatut();
-            System.out.println("statut :" + statut);
-            System.out.println("Courriel2 :" + courriel2);
             System.out.println("le mot de passe de correspond pas");
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
         List<Permission> permissions = utilisateur.getRole().getPermissions();
-        System.out.println("Nouvelles permissions:" + permissions);
         String jwt = serviceJwt.creerJwt(utilisateur.getIdentifiant());
 
         return ResponseEntity.ok()

@@ -10,7 +10,6 @@ public class FabriqueLogementDeBase {
 
         System.out.println("methode: fabriqueLogement creerLogement"); // DEBUG
 
-        // Validate required fields
         if (id <= 0 || idRepresentant == null || idRepresentant.isEmpty()) {
             throw new IllegalArgumentException("Arguments invalides pour créer un Logement");
         }

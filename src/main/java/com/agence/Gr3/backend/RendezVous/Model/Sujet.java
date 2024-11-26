@@ -8,6 +8,6 @@ public interface Sujet {
 
     void retirerObservateur(Observateur observateur);
 
-    void notifierObservateurs(String notification);
+    void notifierObservateurs(String idUtilisateur, String notification);
 
 }

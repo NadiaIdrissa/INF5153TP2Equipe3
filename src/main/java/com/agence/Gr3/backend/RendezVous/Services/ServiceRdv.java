@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,17 +13,42 @@ import com.agence.Gr3.backend.RendezVous.Model.Rdv;
 import com.agence.Gr3.backend.RendezVous.Model.Statut;
 import com.agence.Gr3.backend.RendezVous.Repository.DaoRdv;
 import com.agence.Gr3.backend.Logements.Services.ServiceLogement;
+import com.agence.Gr3.backend.Notifications.Model.Observateur;
+import com.agence.Gr3.backend.Notifications.Services.ServiceNotification;
+import com.agence.Gr3.backend.RendezVous.Model.Sujet;
 
 @Service
-public class ServiceRdv {
+public class ServiceRdv implements Sujet {
 
     private static AtomicInteger atomicId = new AtomicInteger(0);
     private DaoRdv daoRdv;
     private ServiceLogement serviceLogement;
+    private ServiceNotification serviceNotification;
 
-    private ServiceRdv(DaoRdv daoRdv, ServiceLogement serviceLogement) {
+    private List<Observateur> observateurs = new ArrayList<>();
+
+    @Override
+    public void ajouterObservateur(Observateur observateur) {
+        observateurs.add(observateur);
+    };
+
+    @Override
+    public void retirerObservateur(Observateur observateur) {
+        observateurs.remove(observateur);
+    };
+
+    @Override
+    public void notifierObservateurs(String idUtilisateur, String notification) {
+        for (Observateur observateur : observateurs) {
+            observateur.mettreAJour(idUtilisateur, notification);
+        }
+
+    };
+
+    private ServiceRdv(DaoRdv daoRdv, ServiceLogement serviceLogement, ServiceNotification serviceNotification) {
         this.daoRdv = daoRdv;
         this.serviceLogement = serviceLogement;
+        this.serviceNotification = serviceNotification;
     }
 
     /**
@@ -91,6 +117,20 @@ public class ServiceRdv {
     public Rdv confirmer(int idRdv, String idUtilisateur) {
 
         // Le id de l'utilisateur est pour la notification
+        String destinataire;
+
+        Rdv rdv = rechercher(idRdv);
+
+        if (rdv.getIdLocataire().equals(idUtilisateur)) {
+
+            destinataire = rdv.getIdGerant();
+
+        } else {
+            destinataire = rdv.getIdLocataire();
+
+        }
+
+        notifierObservateurs(destinataire, idUtilisateur + "a confirmé le rendez-vous suivant:" + idRdv);
 
         return daoRdv.confirmer(idRdv);
 
@@ -99,7 +139,22 @@ public class ServiceRdv {
     public Rdv annuler(int idRdv, String idUtilisateur) {
 
         // Le id de l'utilisateur est pour la notification
-        return daoRdv.annuler(idRdv);
+        String destinataire;
+
+        Rdv rdv = rechercher(idRdv);
+
+        if (rdv.getIdLocataire().equals(idUtilisateur)) {
+
+            destinataire = rdv.getIdGerant();
+
+        } else {
+            destinataire = rdv.getIdLocataire();
+
+        }
+
+        notifierObservateurs(destinataire, idUtilisateur + "a confirmé le rendez-vous suivant:" + idRdv);
+
+        return daoRdv.confirmer(idRdv);
 
     }
 

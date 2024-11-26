@@ -22,6 +22,7 @@ public enum Permission {
     ANNULER_VISITE("Annuler une visite"),
     MODIFIER_VISITE("Modifier une visite"),
     AFFICHER_VISITES("Afficher mes rdv"),
+    AFFICHER_NOTIFICATIONS("Afficher les notifications"),
     QUITTER("Quitter l'application");
 
     private String description;

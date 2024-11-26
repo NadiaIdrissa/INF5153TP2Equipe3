@@ -4,7 +4,6 @@ import com.agence.Gr3.Model.Adresse;
 
 public class LogementDeBase implements Logement {
 
-    // Attributes
     private int id;
     private String idGerant;
     private Boolean chauffage;
@@ -17,7 +16,6 @@ public class LogementDeBase implements Logement {
     private Double prix;
     private Adresse adresse;
 
-    // Private constructor to ensure Logement can only be created via the factory
     protected LogementDeBase(int id, String idGerant, Adresse adresse) {
         this.id = id;
         this.idGerant = idGerant;

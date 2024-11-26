@@ -21,7 +21,6 @@ public class BuilderUtilisateur {
 
     }
 
-    // Attributs optionnels
     public BuilderUtilisateur setNotifications(List<String> notifications) {
         this.notifications = notifications;
         return this;

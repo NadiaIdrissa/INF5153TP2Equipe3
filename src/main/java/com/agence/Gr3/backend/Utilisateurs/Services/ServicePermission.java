@@ -30,6 +30,7 @@ public class ServicePermission {
     private final AnnulerVisite annulerVisite;
     private final ModifierVisite modifierVisite;
     private final AfficherVisites afficherVisites;
+    private final AfficherNotifications afficherNotifications;
 
     @Autowired
     public ServicePermission(
@@ -45,7 +46,8 @@ public class ServicePermission {
             ConfirmerVisite confirmerVisite,
             AnnulerVisite annulerVisite,
             ModifierVisite modifierVisite,
-            AfficherVisites afficherVisites) {
+            AfficherVisites afficherVisites,
+            AfficherNotifications afficherNotifications) {
         this.creerUtilisateur = creerUtilisateur;
         this.connexion = connexion;
         this.deconnexion = deconnexion;
@@ -59,6 +61,7 @@ public class ServicePermission {
         this.annulerVisite = annulerVisite;
         this.modifierVisite = modifierVisite;
         this.afficherVisites = afficherVisites;
+        this.afficherNotifications = afficherNotifications;
 
     }
 
@@ -90,6 +93,8 @@ public class ServicePermission {
                 return confirmerVisite;
             case AFFICHER_VISITES:
                 return afficherVisites;
+            case AFFICHER_NOTIFICATIONS:
+                return afficherNotifications;
 
             default:
                 throw new IllegalArgumentException("Unknown permission: " + permission);

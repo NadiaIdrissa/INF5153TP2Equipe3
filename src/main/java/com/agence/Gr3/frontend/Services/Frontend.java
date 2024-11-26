@@ -91,6 +91,8 @@ public class Frontend {
             String resultat = commande.execute(permissions, scanner, JWT).toString();
             System.out.println("Résultats de la requête: \n" + resultat);
 
+            // Quitter
+
         }
     }
 
